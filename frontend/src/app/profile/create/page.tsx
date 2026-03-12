@@ -47,9 +47,9 @@ export default function CreateProfile() {
   return (
     <div className="min-h-screen bg-red-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto p-8 md:p-12">
-        <div className="text-center mb-10">
-          <h2 className="text-5xl font-extrabold text-slate-900 mb-3 tracking-tight">Digital Medical Identity</h2>
-          <p className="text-slate-500 text-lg font-medium">Create your MedRescue profile for rapid emergency response.</p>
+        <div className="text-center mb-10 bg-red-600 rounded-2xl p-6 shadow-md text-white">
+          <h2 className="text-5xl font-extrabold mb-3 tracking-tight">Digital Medical Identity</h2>
+          <p className="text-red-100 text-lg font-medium">Create your MedRescue profile for rapid emergency response.</p>
         </div>
         
         <form onSubmit={handleSubmit} className="space-y-8">
