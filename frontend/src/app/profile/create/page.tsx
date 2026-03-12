@@ -12,6 +12,9 @@ export default function CreateProfile() {
     emergency_contact: '', doctor_name: ''
   });
 
+  const inputStyle =
+    "w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-black focus:outline-none focus:ring-2 focus:ring-red-500";
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -53,7 +56,7 @@ export default function CreateProfile() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="col-span-1 md:col-span-2 space-y-2">
               <label className="text-sm font-bold text-slate-700">Full Name</label>
-              <input required name="name" onChange={handleChange} value={formData.name} className="w-full p-4 border border-gray-200 rounded-xl focus:ring-4 focus:ring-red-100 focus:border-red-500 outline-none transition" placeholder="John Doe" />
+              <input required name="name" onChange={handleChange} value={formData.name} className={inputStyle} placeholder="John Doe" />
             </div>
 
             <div className="space-y-2">
@@ -63,7 +66,7 @@ export default function CreateProfile() {
 
             <div className="space-y-2">
               <label className="text-sm font-bold text-slate-700">Gender</label>
-              <select required name="gender" onChange={handleChange} value={formData.gender} className="w-full p-4 border border-gray-200 rounded-xl focus:ring-4 focus:ring-red-100 focus:border-red-500 outline-none transition bg-white cursor-pointer">
+              <select required name="gender" onChange={handleChange} value={formData.gender} className={inputStyle}>
                 <option value="">Select Gender</option>
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
@@ -73,7 +76,7 @@ export default function CreateProfile() {
 
             <div className="space-y-2">
               <label className="text-sm font-bold text-slate-700">Blood Group</label>
-              <select required name="blood_group" onChange={handleChange} value={formData.blood_group} className="w-full p-4 border border-gray-200 rounded-xl focus:ring-4 focus:ring-red-100 focus:border-red-500 outline-none transition bg-white cursor-pointer">
+              <select required name="blood_group" onChange={handleChange} value={formData.blood_group} className={inputStyle}>
                 <option value="">Select Blood Group</option>
                 <option value="A+">A+</option>
                 <option value="A-">A-</option>
@@ -88,7 +91,7 @@ export default function CreateProfile() {
 
             <div className="space-y-2">
               <label className="text-sm font-bold text-slate-700">Emergency Contact</label>
-              <input required name="emergency_contact" onChange={handleChange} value={formData.emergency_contact} className="w-full p-4 border border-gray-200 rounded-xl focus:ring-4 focus:ring-red-100 focus:border-red-500 outline-none transition" placeholder="Phone Number" />
+              <input required name="emergency_contact" onChange={handleChange} value={formData.emergency_contact} className={inputStyle} placeholder="Phone Number" />
             </div>
 
             <div className="col-span-1 md:col-span-2 space-y-2">
@@ -98,7 +101,7 @@ export default function CreateProfile() {
 
             <div className="col-span-1 md:col-span-2 space-y-2">
               <label className="text-sm font-bold text-slate-700">Chronic Conditions</label>
-              <textarea name="chronic_conditions" onChange={handleChange} value={formData.chronic_conditions} rows={2} className="w-full p-4 border border-gray-200 rounded-xl focus:ring-4 focus:ring-red-100 focus:border-red-500 outline-none transition resize-none" placeholder="E.g. Type 2 Diabetes, Asthma"></textarea>
+              <textarea name="chronic_conditions" onChange={handleChange} value={formData.chronic_conditions} rows={2} className={`${inputStyle} resize-none`} placeholder="E.g. Type 2 Diabetes, Asthma"></textarea>
             </div>
 
             <div className="col-span-1 md:col-span-2 space-y-2">
@@ -108,7 +111,7 @@ export default function CreateProfile() {
             
             <div className="col-span-1 md:col-span-2 space-y-2">
               <label className="text-sm font-bold text-slate-700">Primary Doctor Name (Optional)</label>
-              <input name="doctor_name" onChange={handleChange} value={formData.doctor_name} className="w-full p-4 border border-gray-200 rounded-xl focus:ring-4 focus:ring-red-100 focus:border-red-500 outline-none transition" placeholder="Dr. Smith" />
+              <input name="doctor_name" onChange={handleChange} value={formData.doctor_name} className={inputStyle} placeholder="Dr. Smith" />
             </div>
           </div>
 
