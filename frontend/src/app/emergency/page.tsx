@@ -23,7 +23,8 @@ export default function EmergencyRequest() {
           setLocation({ lat, lng });
 
           try {
-            const res = await fetch('http://localhost:8000/api/emergency', {
+            const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+            const res = await fetch(`${API_BASE}/api/emergency`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ latitude: lat, longitude: lng, phone_number: '1234567890' })

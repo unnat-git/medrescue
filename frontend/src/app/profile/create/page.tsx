@@ -20,7 +20,8 @@ export default function CreateProfile() {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await fetch('http://localhost:8000/api/patients', {
+      const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+      const res = await fetch(`${API_BASE}/api/patients`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...formData, age: parseInt(formData.age) })

@@ -10,7 +10,8 @@ export default function PatientProfile() {
 
   useEffect(() => {
     // Fetch patient data from backend
-    fetch(`http://localhost:8000/api/patients/${id}`)
+    const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+    fetch(`${API_BASE}/api/patients/${id}`)
       .then(res => res.json())
       .then(data => {
         setPatient(data);
