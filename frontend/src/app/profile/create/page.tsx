@@ -45,8 +45,8 @@ export default function CreateProfile() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto bg-white rounded-3xl shadow-xl border border-gray-100 p-8 md:p-12">
+    <div className="min-h-screen bg-gradient-to-br from-red-500 via-rose-600 to-red-800 animate-gradient-x py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-4xl mx-auto bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl border border-white/20 p-8 md:p-12">
         <div className="text-center mb-10">
           <h2 className="text-4xl font-extrabold text-slate-900 mb-2">Digital Medical Identity</h2>
           <p className="text-slate-500">Create your MedRescue profile for rapid emergency response.</p>
