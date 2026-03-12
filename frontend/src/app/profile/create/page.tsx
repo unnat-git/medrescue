@@ -47,9 +47,9 @@ export default function CreateProfile() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-red-500 via-rose-600 to-red-800 animate-gradient-x py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-4xl mx-auto bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl border border-white/20 p-8 md:p-12">
-        <div className="text-center mb-10">
-          <h2 className="text-4xl font-extrabold text-slate-900 mb-2">Digital Medical Identity</h2>
-          <p className="text-slate-500">Create your MedRescue profile for rapid emergency response.</p>
+        <div className="text-center mb-10 bg-gradient-to-r from-red-700 via-red-600 to-rose-600 rounded-3xl p-8 md:p-10 shadow-2xl text-white transform hover:scale-[1.01] transition-all duration-300 border border-red-400">
+          <h2 className="text-4xl md:text-5xl font-extrabold mb-3 tracking-tight">Digital Medical Identity</h2>
+          <p className="text-red-100 text-lg md:text-xl font-medium">Create your MedRescue profile for rapid emergency response.</p>
         </div>
         
         <form onSubmit={handleSubmit} className="space-y-8">
