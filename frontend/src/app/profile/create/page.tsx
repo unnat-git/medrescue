@@ -61,7 +61,7 @@ export default function CreateProfile() {
 
             <div className="space-y-2">
               <label className="text-sm font-bold text-slate-700">Age</label>
-              <input required type="number" name="age" onChange={handleChange} value={formData.age} className="w-full p-4 border border-gray-200 rounded-xl focus:ring-4 focus:ring-red-100 focus:border-red-500 outline-none transition" placeholder="32" />
+              <input required type="number" name="age" onChange={handleChange} value={formData.age} className={inputStyle} placeholder="32" />
             </div>
 
             <div className="space-y-2">
@@ -96,7 +96,7 @@ export default function CreateProfile() {
 
             <div className="col-span-1 md:col-span-2 space-y-2">
               <label className="text-sm font-bold text-slate-700">Allergies</label>
-              <textarea name="allergies" onChange={handleChange} value={formData.allergies} rows={2} className="w-full p-4 border border-gray-200 rounded-xl focus:ring-4 focus:ring-red-100 focus:border-red-500 outline-none transition resize-none" placeholder="E.g. Penicillin, Peanuts (or 'None')"></textarea>
+              <textarea name="allergies" onChange={handleChange} value={formData.allergies} rows={2} className={`${inputStyle} resize-none`} placeholder="E.g. Penicillin, Peanuts (or 'None')"></textarea>
             </div>
 
             <div className="col-span-1 md:col-span-2 space-y-2">
@@ -106,7 +106,7 @@ export default function CreateProfile() {
 
             <div className="col-span-1 md:col-span-2 space-y-2">
               <label className="text-sm font-bold text-slate-700">Current Medications & Past Surgeries</label>
-              <textarea name="current_medications" onChange={handleChange} value={formData.current_medications} rows={3} className="w-full p-4 border border-gray-200 rounded-xl focus:ring-4 focus:ring-red-100 focus:border-red-500 outline-none transition resize-none" placeholder="Medications, dosages, and relevant medical history..."></textarea>
+              <textarea name="current_medications" onChange={handleChange} value={formData.current_medications} rows={3} className={`${inputStyle} resize-none`} placeholder="Medications, dosages, and relevant medical history..."></textarea>
             </div>
             
             <div className="col-span-1 md:col-span-2 space-y-2">
