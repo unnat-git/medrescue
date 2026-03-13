@@ -1,4 +1,6 @@
 import { Request, Response } from 'express';
+import db from '../db';
+import { calculateDistance } from '../utils/distance';
 
 export const getNearbyHospitals = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -9,51 +11,46 @@ export const getNearbyHospitals = async (req: Request, res: Response): Promise<v
       return;
     }
 
-    const apiKey = process.env.GOOGLE_PLACES_API_KEY;
-    if (!apiKey) {
-      console.error('GOOGLE_PLACES_API_KEY is not defined in .env');
-      res.status(500).json({ message: 'Server configuration error: Google Places API key missing' });
+    const userLat = parseFloat(latitude as string);
+    const userLng = parseFloat(longitude as string);
+
+    if (isNaN(userLat) || isNaN(userLng)) {
+      res.status(400).json({ message: 'Invalid latitude or longitude format' });
       return;
     }
 
-    // Google Places API Nearby Search URL
-    const radius = 50000; // 50km radius
-    const apiUrl = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=${radius}&type=hospital&key=${apiKey}`;
+    // Fetch all seeded hospitals from DB
+    const result = await db.query('SELECT * FROM hospitals');
+    const dbHospitals = result.rows;
 
-    const response = await fetch(apiUrl);
-    const data = await response.json();
-
-    if (data.status !== 'OK' && data.status !== 'ZERO_RESULTS') {
-      console.error('Google Places API error:', data);
-      res.status(500).json({ message: 'Error fetching hospitals from Google Places API', details: data.status });
-      return;
-    }
-
-    // Map and calculate distance/eta simplified for the response
-    // For a real production app, Distance Matrix API could be used, but straight-line distance is faster here
-    const hospitals = data.results.slice(0, 10).map((place: any) => {
-      const hLat = place.geometry.location.lat;
-      const hLng = place.geometry.location.lng;
-      
-      // Basic distance calculation (Haversine formula is already in utils, let's just return coordinates for frontend to calculate or use it here if we import it)
+    // Calculate distance and filter for nearby (e.g., within 10km) if needed, 
+    // but since we seeded specifically around 700107 we can just sort by distance
+    const hospitalsWithDistance = dbHospitals.map(hosp => {
+      const distance = calculateDistance(userLat, userLng, hosp.latitude, hosp.longitude);
       return {
-        id: place.place_id,
-        name: place.name,
-        address: place.vicinity,
-        latitude: hLat,
-        longitude: hLng,
-        rating: place.rating || 'N/A',
-        open_now: place.opening_hours?.open_now,
+        id: hosp.id.toString(),
+        name: hosp.name,
+        address: hosp.contact_number !== 'Not Available' ? `Phone: ${hosp.contact_number}` : 'Address/Phone not available',
+        latitude: hosp.latitude,
+        longitude: hosp.longitude,
+        distance, // km
+        contact_number: hosp.contact_number
       };
     });
 
+    // Sort by nearest first
+    hospitalsWithDistance.sort((a, b) => a.distance - b.distance);
+    
+    // Take Top 15 closest
+    const topHospitals = hospitalsWithDistance.slice(0, 15);
+
     res.status(200).json({
-      message: 'Hospitals fetched successfully',
-      count: hospitals.length,
-      hospitals,
+      message: 'Nearby hospitals fetched successfully',
+      count: topHospitals.length,
+      hospitals: topHospitals,
     });
   } catch (error) {
-    console.error('Error fetching nearby hospitals:', error);
+    console.error('Error fetching nearby hospitals from database:', error);
     res.status(500).json({ message: 'Internal Server Error' });
   }
 };
