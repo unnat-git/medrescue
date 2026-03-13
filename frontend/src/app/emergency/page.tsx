@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { socket } from '@/services/socket';
+import MapComponent from '@/components/MapComponent';
+import { Marker, Popup } from 'react-leaflet';
 
 export default function EmergencyRequest() {
   const [status, setStatus] = useState<'idle' | 'requesting' | 'assigned' | 'arriving'>('idle');
@@ -37,6 +39,11 @@ export default function EmergencyRequest() {
               // Listen for ambulance updates
               socket.on(`ambulanceLocation_${data.assigned_ambulance.id}`, (updateData) => {
                 console.log('Ambulance moved', updateData);
+                setAmbulance((prev: any) => ({
+                  ...prev,
+                  latitude: updateData.latitude,
+                  longitude: updateData.longitude
+                }));
               });
             } else {
               alert(data.message || 'Error occurred');
@@ -99,8 +106,19 @@ export default function EmergencyRequest() {
               <p className="text-gray-600"><strong>Vehicle ID:</strong> AMB-{ambulance.id}</p>
             </div>
 
-            <div className="h-48 bg-gray-200 rounded-2xl flex items-center justify-center border border-gray-300 overflow-hidden relative">
-              <span className="text-gray-500 font-medium">Map View Integration Pending</span>
+            <div className="h-64 bg-gray-200 rounded-2xl flex items-center justify-center border border-gray-300 overflow-hidden relative">
+              {(location && ambulance) ? (
+                <MapComponent center={[location.lat, location.lng]} zoom={14} height="100%">
+                  <Marker position={[location.lat, location.lng]}>
+                    <Popup>Your Location</Popup>
+                  </Marker>
+                  <Marker position={[ambulance.latitude, ambulance.longitude]}>
+                    <Popup>Ambulance ({ambulance.driver_name})</Popup>
+                  </Marker>
+                </MapComponent>
+              ) : (
+                <span className="text-gray-500 font-medium">Loading map...</span>
+              )}
             </div>
           </div>
         )}

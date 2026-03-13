@@ -37,8 +37,14 @@ export default function Home() {
               Request Emergency Help
             </Link>
             <Link
+              href="/hospitals-nearby"
+              className="inline-flex h-12 items-center justify-center rounded-full bg-blue-600 px-8 text-sm font-bold text-white shadow-lg shadow-blue-500/30 hover:bg-blue-700 transition"
+            >
+              Self-Transport (Find Hospital)
+            </Link>
+            <Link
               href="/profile/create"
-              className="inline-flex h-12 items-center justify-center rounded-full border border-gray-200 bg-white px-8 text-sm font-medium hover:bg-gray-100 hover:text-gray-900 transition"
+              className="inline-flex h-12 items-center justify-center rounded-full border border-gray-200 bg-white px-8 text-sm font-medium hover:bg-gray-100 hover:text-gray-900 transition mt-4 sm:mt-0"
             >
               Create Medical Profile
             </Link>

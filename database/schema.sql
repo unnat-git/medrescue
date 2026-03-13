@@ -48,8 +48,6 @@ INSERT INTO ambulances (driver_name, latitude, longitude, status)
 SELECT 'Mike Swift', 37.7849, -122.4094, 'available'
 WHERE NOT EXISTS (SELECT 1 FROM ambulances WHERE driver_name = 'Mike Swift');
 
-INSERT INTO hospitals (name, latitude, longitude, contact_number)
-SELECT 'City General Hospital', 37.7649, -122.4294, '1-800-HOSPITAL'
-WHERE NOT EXISTS (SELECT 1 FROM hospitals WHERE name = 'City General Hospital');
+
 
 

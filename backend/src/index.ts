@@ -9,6 +9,7 @@ import { Server } from 'socket.io';
 import db from './db';
 import emergencyRoutes from './routes/emergencyRoutes';
 import patientRoutes from './routes/patientRoutes';
+import hospitalRoutes from './routes/hospitalRoutes';
 import initDB from './init-db';
 
 const app = express();
@@ -25,6 +26,7 @@ app.use(express.json());
 
 app.use('/api/emergency', emergencyRoutes);
 app.use('/api/patients', patientRoutes);
+app.use('/api/hospitals', hospitalRoutes);
 
 // Basic health check
 app.get('/health', (req, res) => {

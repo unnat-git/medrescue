@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { socket } from '@/services/socket';
+import MapComponent from '@/components/MapComponent';
+import { Marker, Popup } from 'react-leaflet';
 
 export default function HospitalDashboard() {
   const [incoming, setIncoming] = useState([
@@ -32,7 +34,7 @@ export default function HospitalDashboard() {
             Incoming Patients <span className="bg-red-600 text-white text-sm px-2 py-0.5 rounded-full">{incoming.length}</span>
           </h2>
           <div className="space-y-4">
-            {incoming.map((patient) => (
+            {incoming.map((patient: any) => (
               <div key={patient.id} className="bg-white border-l-4 border-red-600 rounded-xl p-6 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-6">
                 <div>
                   <h3 className="text-xl font-bold text-slate-900">{patient.patientName}</h3>
@@ -64,9 +66,16 @@ export default function HospitalDashboard() {
 
         <div>
           <h2 className="text-xl font-bold mb-4">Live Ambulances</h2>
-          <div className="bg-slate-200 rounded-xl shadow-inner p-4 h-[400px] border border-slate-300 flex items-center justify-center relative overflow-hidden">
-            <div className="absolute inset-0 opacity-20 bg-[url('https://maps.googleapis.com/maps/api/staticmap?center=37.77,-122.41&zoom=13&size=400x400')] bg-cover"></div>
-            <span className="relative font-bold text-slate-600 bg-white/80 px-4 py-2 rounded-lg backdrop-blur text-sm">Map View Pending</span>
+          <div className="bg-slate-200 rounded-xl shadow-inner border border-slate-300 overflow-hidden h-[400px]">
+            <MapComponent center={[37.77, -122.41]} zoom={12} height="100%">
+              {/* Real-time ambulance markers would be rendered here via socket events */}
+              <Marker position={[37.77, -122.41]}>
+                <Popup>Ambulance A-123</Popup>
+              </Marker>
+              <Marker position={[37.79, -122.40]}>
+                <Popup>Ambulance A-456</Popup>
+              </Marker>
+            </MapComponent>
           </div>
         </div>
       </div>
