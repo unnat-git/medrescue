@@ -3,13 +3,17 @@
 import { useState, useEffect } from 'react';
 import { socket } from '@/services/socket';
 import MapComponent from '@/components/MapComponent';
-import { Marker, Popup } from 'react-leaflet';
 
 export default function HospitalDashboard() {
   const [incoming, setIncoming] = useState([
     { id: '1', patientName: 'John Doe', condition: 'Severe allergic reaction', bloodType: 'O+', eta: '5 mins', distance: '2.1 km' },
     { id: '2', patientName: 'Jane Smith', condition: 'Cardiac arrest', bloodType: 'A-', eta: '12 mins', distance: '6.4 km' }
   ]);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
   
   return (
     <div className="min-h-screen bg-slate-50 p-6 md:p-10">
@@ -67,15 +71,17 @@ export default function HospitalDashboard() {
         <div>
           <h2 className="text-xl font-bold mb-4">Live Ambulances</h2>
           <div className="bg-slate-200 rounded-xl shadow-inner border border-slate-300 overflow-hidden h-[400px]">
-            <MapComponent center={[37.77, -122.41]} zoom={12} height="100%">
-              {/* Real-time ambulance markers would be rendered here via socket events */}
-              <Marker position={[37.77, -122.41]}>
-                <Popup>Ambulance A-123</Popup>
-              </Marker>
-              <Marker position={[37.79, -122.40]}>
-                <Popup>Ambulance A-456</Popup>
-              </Marker>
-            </MapComponent>
+            {isMounted && (
+              <MapComponent 
+                center={[37.77, -122.41]} 
+                zoom={12} 
+                height="100%"
+                markers={[
+                  { position: [37.77, -122.41], label: "Ambulance A-123", type: 'ambulance' },
+                  { position: [37.79, -122.40], label: "Ambulance A-456", type: 'ambulance' }
+                ]}
+              />
+            )}
           </div>
         </div>
       </div>

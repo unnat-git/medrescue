@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import { fetchNearestHospitals, Hospital } from "@/utils/mapUtils";
 import MapComponent from "@/components/MapComponent";
-import { Marker, Popup } from "react-leaflet";
 import { MapPin, Navigation, Clock, Activity } from "lucide-react";
 
 const defaultCenter = { lat: 28.6139, lng: 77.2090 }; // Default to New Delhi
@@ -13,6 +12,7 @@ export default function HospitalsNearbyPage() {
   const [hospitals, setHospitals] = useState<Hospital[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isMounted, setIsMounted] = useState(false);
 
   const fetchHospitalsData = async (lat: number, lng: number) => {
     setLoading(true);
@@ -57,6 +57,7 @@ export default function HospitalsNearbyPage() {
   };
 
   useEffect(() => {
+    setIsMounted(true);
     getUserLocation();
   }, []);
 
@@ -141,24 +142,21 @@ export default function HospitalsNearbyPage() {
 
         {/* Right Panel - Map */}
         <div className="w-full md:w-2/3 h-[50vh] md:h-auto relative bg-slate-100">
-          <MapComponent center={userLocation ? [userLocation.lat, userLocation.lng] : [defaultCenter.lat, defaultCenter.lng]} zoom={13} height="100%">
-            {/* User Location */}
-            {userLocation && (
-              <Marker position={[userLocation.lat, userLocation.lng]}>
-                <Popup>Your Location</Popup>
-              </Marker>
-            )}
-            
-            {/* Hospitals */}
-            {hospitals.map((h) => (
-              <Marker 
-                key={h.id}
-                position={[h.lat, h.lon]}
-              >
-                <Popup>{h.name}</Popup>
-              </Marker>
-            ))}
-          </MapComponent>
+          {isMounted && (
+            <MapComponent 
+              center={userLocation ? [userLocation.lat, userLocation.lng] : [defaultCenter.lat, defaultCenter.lng]} 
+              zoom={13} 
+              height="100%"
+              markers={[
+                ...(userLocation ? [{ position: [userLocation.lat, userLocation.lng] as [number, number], label: "You are here", type: 'patient' as const }] : []),
+                ...hospitals.map(h => ({
+                  position: [h.lat, h.lon] as [number, number],
+                  label: h.name,
+                  type: 'hospital' as const
+                }))
+              ]}
+            />
+          )}
         </div>
       </main>
     </div>

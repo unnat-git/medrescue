@@ -3,7 +3,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { socket } from '@/services/socket';
 import MapComponent from '@/components/MapComponent';
-import { Marker, Popup, Polyline } from 'react-leaflet';
 import { Navigation, CheckCircle, MapPin } from 'lucide-react';
 import { calculateRoute } from '@/utils/mapUtils';
 
@@ -19,11 +18,13 @@ export default function DriverDashboard() {
   const [routePath, setRoutePath] = useState<number[][] | null>(null);
   const [routeInfo, setRouteInfo] = useState<{ distance: string; duration: string } | null>(null);
   const [phase, setPhase] = useState<"IDLE" | "TO_PATIENT" | "TO_HOSPITAL">("IDLE");
+  const [isMounted, setIsMounted] = useState(false);
 
   const ambulanceId = '1'; // Mock driver ID matched with schema.sql ID 1 (John Driver)
 
-  // Mock data for initial load
+  // Initial load
   useEffect(() => {
+    setIsMounted(true);
     setRequests([
       { id: '101', patientName: 'John Doe', loc: { latitude: 28.6250, longitude: 77.2150 }, urg: 'High' },
       { id: '102', patientName: 'Jane Smith', loc: { latitude: 28.6300, longitude: 77.2200 }, urg: 'Medium' }
@@ -200,27 +201,19 @@ export default function DriverDashboard() {
           </div>
         ) : (
           <div className="flex-1 relative bg-slate-200 rounded-2xl overflow-hidden shadow-inner border border-slate-300 min-h-[50vh]">
-            <MapComponent center={[driverLocation.latitude, driverLocation.longitude]} zoom={14} height="100%">
-              <Marker position={[driverLocation.latitude, driverLocation.longitude]}>
-                <Popup>Your Location (Ambulance)</Popup>
-              </Marker>
-              
-              {activeRequest && phase === "TO_PATIENT" && (
-                <Marker position={[activeRequest.loc.latitude, activeRequest.loc.longitude]}>
-                  <Popup>Patient: {activeRequest.patientName}</Popup>
-                </Marker>
-              )}
-
-              {activeRequest && phase === "TO_HOSPITAL" && activeRequest.hospital && (
-                <Marker position={[activeRequest.hospital.latitude, activeRequest.hospital.longitude]}>
-                  <Popup>Destination: {activeRequest.hospital.name}</Popup>
-                </Marker>
-              )}
-
-              {routePath && (
-                <Polyline positions={routePath as any} pathOptions={{ color: 'red', weight: 5 }} />
-              )}
-            </MapComponent>
+            {isMounted && (
+              <MapComponent 
+                center={[driverLocation.latitude, driverLocation.longitude]} 
+                zoom={14} 
+                height="100%"
+                markers={[
+                  { position: [driverLocation.latitude, driverLocation.longitude], label: "Your Location (Ambulance)", type: 'ambulance' },
+                  ...(activeRequest && phase === "TO_PATIENT" ? [{ position: [activeRequest.loc.latitude, activeRequest.loc.longitude] as [number, number], label: `Patient: ${activeRequest.patientName}`, type: 'patient' as const }] : []),
+                  ...(activeRequest && phase === "TO_HOSPITAL" && activeRequest.hospital ? [{ position: [activeRequest.hospital.latitude, activeRequest.hospital.longitude] as [number, number], label: `Destination: ${activeRequest.hospital.name}`, type: 'hospital' as const }] : [])
+                ]}
+                polyLine={routePath as [number, number][]}
+              />
+            )}
           </div>
         )}
       </div>

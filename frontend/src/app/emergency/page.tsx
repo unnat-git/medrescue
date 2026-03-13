@@ -3,14 +3,15 @@
 import { useState, useEffect } from 'react';
 import { socket } from '@/services/socket';
 import MapComponent from '@/components/MapComponent';
-import { Marker, Popup } from 'react-leaflet';
 
 export default function EmergencyRequest() {
   const [status, setStatus] = useState<'idle' | 'requesting' | 'assigned' | 'arriving'>('idle');
   const [location, setLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [ambulance, setAmbulance] = useState<any>(null);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
+    setIsMounted(true);
     socket.connect();
     return () => { socket.disconnect(); };
   }, []);
@@ -107,15 +108,16 @@ export default function EmergencyRequest() {
             </div>
 
             <div className="h-64 bg-gray-200 rounded-2xl flex items-center justify-center border border-gray-300 overflow-hidden relative">
-              {(location && ambulance) ? (
-                <MapComponent center={[location.lat, location.lng]} zoom={14} height="100%">
-                  <Marker position={[location.lat, location.lng]}>
-                    <Popup>Your Location</Popup>
-                  </Marker>
-                  <Marker position={[ambulance.latitude, ambulance.longitude]}>
-                    <Popup>Ambulance ({ambulance.driver_name})</Popup>
-                  </Marker>
-                </MapComponent>
+              {(isMounted && location && ambulance) ? (
+                <MapComponent 
+                  center={[location.lat, location.lng]} 
+                  zoom={14} 
+                  height="100%"
+                  markers={[
+                    { position: [location.lat, location.lng], label: "Your Location", type: 'patient' },
+                    { position: [ambulance.latitude, ambulance.longitude], label: `Ambulance (${ambulance.driver_name})`, type: 'ambulance' }
+                  ]}
+                />
               ) : (
                 <span className="text-gray-500 font-medium">Loading map...</span>
               )}
