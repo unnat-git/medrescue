@@ -24,9 +24,10 @@ export default function HospitalsNearbyPage() {
       } else {
         setHospitals([]);
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
       setError("Failed to fetch nearby hospitals. Please try again.");
+
     } finally {
       setLoading(false);
     }

@@ -5,12 +5,14 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { User, Activity, Shield, Phone, MapPin, Download, Edit3, PlusCircle, LogOut } from "lucide-react";
 import { API_ENDPOINTS } from "@/config/api";
-
+import { MedicalProfile } from "@/types";
 import QRCode from "qrcode";
+
 
 export default function ProfilePage() {
   const router = useRouter();
-  const [profile, setProfile] = useState<any>(null);
+  const [profile, setProfile] = useState<MedicalProfile | null>(null);
+
   const [loading, setLoading] = useState(true);
   const [qrCodeUrl, setQrCodeUrl] = useState("");
   const qrRef = useRef<HTMLAnchorElement>(null);

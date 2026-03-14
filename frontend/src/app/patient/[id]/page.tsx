@@ -4,11 +4,14 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { Activity, Shield, Heart, AlertCircle, Phone, User } from 'lucide-react';
 import { API_ENDPOINTS } from "@/config/api";
+import { MedicalProfile } from "@/types";
+
 
 
 export default function PatientProfile() {
   const { id } = useParams();
-  const [profile, setProfile] = useState<any>(null);
+  const [profile, setProfile] = useState<MedicalProfile | null>(null);
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 

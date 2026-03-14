@@ -54,10 +54,11 @@ export default function CreateProfile() {
         const data = await res.json();
         setError(data.message || 'Error creating profile');
       }
-    } catch (err) {
-       console.error(err);
-       setError('Network error contacting backend.');
-    } finally {
+     } catch (err: unknown) {
+        console.error(err);
+        setError('Network error contacting backend.');
+     } finally {
+
       setLoading(false);
     }
   };

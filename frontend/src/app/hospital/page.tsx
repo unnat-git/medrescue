@@ -4,11 +4,21 @@ import { useState, useEffect } from 'react';
 import { socket } from '@/services/socket';
 import MapComponent from '@/components/MapComponent';
 
+interface IncomingPatient {
+  id: string;
+  patientName: string;
+  condition: string;
+  bloodType: string;
+  eta: string;
+  distance: string;
+}
+
 export default function HospitalDashboard() {
-  const [incoming, setIncoming] = useState([
+  const [incoming, setIncoming] = useState<IncomingPatient[]>([
     { id: '1', patientName: 'John Doe', condition: 'Severe allergic reaction', bloodType: 'O+', eta: '5 mins', distance: '2.1 km' },
     { id: '2', patientName: 'Jane Smith', condition: 'Cardiac arrest', bloodType: 'A-', eta: '12 mins', distance: '6.4 km' }
   ]);
+
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
@@ -38,7 +48,8 @@ export default function HospitalDashboard() {
             Incoming Patients <span className="bg-red-600 text-white text-sm px-2 py-0.5 rounded-full">{incoming.length}</span>
           </h2>
           <div className="space-y-4">
-            {incoming.map((patient: any) => (
+            {incoming.map((patient) => (
+
               <div key={patient.id} className="bg-white border-l-4 border-red-600 rounded-xl p-6 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-6">
                 <div>
                   <h3 className="text-xl font-bold text-slate-900">{patient.patientName}</h3>

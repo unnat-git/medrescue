@@ -14,6 +14,19 @@ const DynamicMap = dynamic(() => import('./LeafletMap'), {
   ),
 });
 
-export default function MapComponent(props: any) {
+interface MapComponentProps {
+  center: [number, number];
+  zoom: number;
+  height?: string;
+  markers?: Array<{
+    position: [number, number];
+    label: string;
+    type?: 'patient' | 'hospital' | 'ambulance';
+  }>;
+  polyLine?: [number, number][];
+}
+
+export default function MapComponent(props: MapComponentProps) {
   return <DynamicMap {...props} />;
 }
+

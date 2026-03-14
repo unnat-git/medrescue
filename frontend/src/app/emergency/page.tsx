@@ -4,12 +4,15 @@ import { useState, useEffect } from 'react';
 import { socket } from '@/services/socket';
 import MapComponent from '@/components/MapComponent';
 import { API_ENDPOINTS } from '@/config/api';
+import { Ambulance } from '@/types';
+
 
 
 export default function EmergencyRequest() {
   const [status, setStatus] = useState<'idle' | 'requesting' | 'assigned' | 'arriving'>('idle');
   const [location, setLocation] = useState<{ lat: number; lng: number } | null>(null);
-  const [ambulance, setAmbulance] = useState<any>(null);
+  const [ambulance, setAmbulance] = useState<Ambulance | null>(null);
+
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
@@ -40,14 +43,18 @@ export default function EmergencyRequest() {
               setAmbulance(data.assigned_ambulance);
               
               // Listen for ambulance updates
-              socket.on(`ambulanceLocation_${data.assigned_ambulance.id}`, (updateData) => {
+              socket.on(`ambulanceLocation_${data.assigned_ambulance.id}`, (updateData: { latitude: number, longitude: number }) => {
                 console.log('Ambulance moved', updateData);
-                setAmbulance((prev: any) => ({
-                  ...prev,
-                  latitude: updateData.latitude,
-                  longitude: updateData.longitude
-                }));
+                setAmbulance((prev) => {
+                  if (!prev) return null;
+                  return {
+                    ...prev,
+                    latitude: updateData.latitude,
+                    longitude: updateData.longitude
+                  };
+                });
               });
+
             } else {
               alert(data.message || 'Error occurred');
               setStatus('idle');

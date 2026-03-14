@@ -3,10 +3,15 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Activity, ShieldCheck, ArrowLeft, RefreshCw, Smartphone, ArrowRight, AlertCircle } from "lucide-react";
+import { API_ENDPOINTS } from "@/config/api";
+import { SignupData } from "@/types";
+
+
 
 export default function VerifyOTPPage() {
   const router = useRouter();
-  const [signupData, setSignupData] = useState<any>(null);
+  const [signupData, setSignupData] = useState<SignupData | null>(null);
+
   const [otp, setOtp] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -35,8 +40,7 @@ export default function VerifyOTPPage() {
     setLoading(true);
 
     try {
-      const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-      const response = await fetch(`${API_BASE}/api/auth/verify-otp`, {
+      const response = await fetch(API_ENDPOINTS.AUTH.VERIFY_OTP, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -44,6 +48,7 @@ export default function VerifyOTPPage() {
           otp
         }),
       });
+
 
       const data = await response.json();
 
@@ -63,17 +68,18 @@ export default function VerifyOTPPage() {
   };
 
   const handleResend = async () => {
-    if (timer > 0) return;
+    if (timer > 0 || !signupData) return;
     
     setResending(true);
     setError("");
     try {
-      const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-      await fetch(`${API_BASE}/api/auth/signup`, {
+      await fetch(API_ENDPOINTS.AUTH.SIGNUP, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ phone_number: signupData.phone_number }),
       });
+
+
       setTimer(30);
     } catch (err) {
       setError("Failed to resend OTP");

@@ -8,12 +8,22 @@ import { calculateRoute } from '@/utils/mapUtils';
 
 const defaultCenter = { latitude: 28.6139, longitude: 77.2090 }; // Default Driver location
 
+interface DriverRequest {
+  id: string;
+  patientName: string;
+  loc: { latitude: number; longitude: number };
+  urg: 'High' | 'Medium' | 'Low';
+  hospital?: { latitude: number; longitude: number; name: string };
+}
+
 export default function DriverDashboard() {
-  const [requests, setRequests] = useState<any[]>([]);
+  const [requests, setRequests] = useState<DriverRequest[]>([]);
+
   const [isAvailable, setIsAvailable] = useState(true);
   
   const [driverLocation, setDriverLocation] = useState(defaultCenter);
-  const [activeRequest, setActiveRequest] = useState<any | null>(null);
+  const [activeRequest, setActiveRequest] = useState<DriverRequest | null>(null);
+
   
   const [routePath, setRoutePath] = useState<number[][] | null>(null);
   const [routeInfo, setRouteInfo] = useState<{ distance: string; duration: string } | null>(null);
@@ -76,7 +86,7 @@ export default function DriverDashboard() {
     }
   };
 
-  const acceptRequest = (req: any) => {
+  const acceptRequest = (req: DriverRequest) => {
     setRequests(requests.filter(r => r.id !== req.id));
     setIsAvailable(false);
     setActiveRequest(req);
@@ -84,13 +94,16 @@ export default function DriverDashboard() {
     fetchRoute(driverLocation, req.loc);
   };
 
+
   const handleArrivedAtPatient = async () => {
+    if (!activeRequest) return;
     // Navigate to nearest hospital
     const mockNearestHospital = { latitude: 28.5900, longitude: 77.2300, name: "City General Hospital" };
     setActiveRequest({ ...activeRequest, hospital: mockNearestHospital });
     setPhase("TO_HOSPITAL");
     fetchRoute(activeRequest.loc, mockNearestHospital);
   };
+
 
   const handleCompletedTrip = () => {
     setIsAvailable(true);

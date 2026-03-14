@@ -59,8 +59,10 @@ export default function SignupPage() {
       } else {
         setError(data.message || "Something went wrong");
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
+      console.error("Signup error:", err);
       setError("Failed to connect to server. Please try again later.");
+
     } finally {
       setLoading(false);
     }

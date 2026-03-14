@@ -11,8 +11,9 @@ export interface Hospital {
   name: string;
   lat: number;
   lon: number;
-  distance?: number;
+  distance: number;
 }
+
 
 // 1. Haversine distance calculator for fallback or sorting
 export function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
@@ -52,12 +53,19 @@ export async function fetchNearestHospitals(lat: number, lon: number, radiusKm: 
     const data = await response.json();
     
     // Parse results
-    const hospitals: Hospital[] = data.elements
-      .map((element: any) => {
+    const hospitals: Hospital[] = (data.elements as {
+      id: number;
+      lat?: number;
+      lon?: number;
+      center?: { lat: number; lon: number };
+      tags?: { name?: string };
+    }[])
+      .map((element) => {
         const lat_center = element.lat || element.center?.lat;
         const lon_center = element.lon || element.center?.lon;
         
         if (!lat_center || !lon_center) return null;
+
 
         const dist = calculateDistance(lat, lon, lat_center, lon_center);
 
@@ -69,9 +77,11 @@ export async function fetchNearestHospitals(lat: number, lon: number, radiusKm: 
           distance: dist
         };
       })
-      .filter(Boolean)
-      .sort((a: Hospital, b: Hospital) => (a.distance || 0) - (b.distance || 0))
+      .filter((h): h is Hospital => h !== null)
+      .sort((a, b) => a.distance - b.distance)
       .slice(0, 10); // Take nearest 10
+
+
 
     return hospitals;
   } catch (error) {
