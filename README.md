@@ -26,7 +26,8 @@ MedRescue modernizes emergency medical services by offering:
 
 #### Backend (`backend/.env`)
 ```env
-DATABASE_URL=postgresql://user:password@localhost:5432/medrescue
+DATABASE_URL=postgresql://medrescue:MedRescueSecure@dpg-d6oulihaae7s73bk8jk0-a.singapore-postgres.render.com/medrescue
+
 PORT=8000
 JWT_SECRET=your_jwt_secret
 TWILIO_ACCOUNT_SID=your_sid

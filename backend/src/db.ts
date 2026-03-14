@@ -3,10 +3,13 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
+const isLocalhost = process.env.DATABASE_URL?.includes('localhost') || process.env.DATABASE_URL?.includes('127.0.0.1');
+
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL || 'postgresql://postgres:postgres@localhost:5432/medrescue',
-  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : undefined,
+  connectionString: process.env.DATABASE_URL,
+  ssl: isLocalhost ? undefined : { rejectUnauthorized: false },
 });
+
 
 // Test connection
 pool.connect((err, client, release) => {
