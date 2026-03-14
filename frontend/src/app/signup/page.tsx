@@ -109,7 +109,7 @@ export default function SignupPage() {
                   type="text"
                   required
                   className="block w-full pl-11 pr-4 py-4 bg-slate-50 border-none rounded-2xl text-slate-900 font-medium placeholder:text-slate-400 focus:ring-2 focus:ring-red-600 ring-offset-0 transition-all shadow-inner"
-                  placeholder=""
+                  placeholder="Enter your full name"
                   value={formData.full_name}
 
                   onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
@@ -125,7 +125,7 @@ export default function SignupPage() {
                  <PhoneInput
                     international
                     defaultCountry="IN"
-                    placeholder="Enter phone number"
+                    placeholder="Enter your phone number"
                     value={phoneNumber}
                     onChange={setPhoneNumber}
                     className="flex w-full px-4 py-2 bg-slate-50 border-none rounded-2xl text-slate-900 font-medium focus-within:ring-2 focus-within:ring-red-600 transition-all shadow-inner"
@@ -147,7 +147,7 @@ export default function SignupPage() {
                 <input
                   type="email"
                   className="block w-full pl-11 pr-4 py-4 bg-slate-50 border-none rounded-2xl text-slate-900 font-medium placeholder:text-slate-400 focus:ring-2 focus:ring-red-600 ring-offset-0 transition-all shadow-inner"
-                  placeholder="john@example.com"
+                  placeholder="Enter your email address (optional)"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 />
@@ -167,7 +167,7 @@ export default function SignupPage() {
                     type="password"
                     required
                     className="block w-full pl-11 pr-4 py-4 bg-slate-50 border-none rounded-2xl text-slate-900 font-medium placeholder:text-slate-400 focus:ring-2 focus:ring-red-600 ring-offset-0 transition-all shadow-inner text-sm"
-                    placeholder="••••"
+                    placeholder="Create a password"
                     value={formData.password}
                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                   />
@@ -186,7 +186,7 @@ export default function SignupPage() {
                     type="password"
                     required
                     className="block w-full pl-11 pr-4 py-4 bg-slate-50 border-none rounded-2xl text-slate-900 font-medium placeholder:text-slate-400 focus:ring-2 focus:ring-red-600 ring-offset-0 transition-all shadow-inner text-sm"
-                    placeholder="••••"
+                    placeholder="Confirm your password"
                     value={formData.confirmPassword}
                     onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
                   />
@@ -201,7 +201,10 @@ export default function SignupPage() {
                 className="w-full flex justify-center items-center py-5 px-4 border border-transparent rounded-2xl shadow-xl shadow-red-200 text-lg font-black text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-all transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed group"
               >
                 {loading ? (
-                  <div className="h-6 w-6 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+                  <div className="flex items-center gap-3">
+                    <div className="h-6 w-6 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+                    <span className="text-sm font-bold uppercase tracking-widest">Sending verification code...</span>
+                  </div>
                 ) : (
                   <>
                     Sign up
@@ -210,6 +213,7 @@ export default function SignupPage() {
                 )}
               </button>
             </div>
+
           </form>
         </div>
 

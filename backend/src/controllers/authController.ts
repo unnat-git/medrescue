@@ -8,29 +8,60 @@ const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
 
 export const signup = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { phone_number } = req.body;
+    let { phone_number } = req.body;
 
     if (!phone_number) {
       res.status(400).json({ message: 'Phone number is required' });
       return;
     }
 
-    // Check if user already exists and is verified
-    const existingUser = await db.query('SELECT * FROM users WHERE phone_number = $1 AND phone_verified = true', [phone_number]);
-    if (existingUser.rows.length > 0) {
-      res.status(400).json({ message: 'User with this phone number already exists' });
-      return;
+    // Format phone number: remove spaces and dashes
+    phone_number = phone_number.replace(/[\s-]/g, '');
+    
+    // Automatically add +91 prefix if user enters 10 digits
+    if (/^\d{10}$/.test(phone_number)) {
+      phone_number = `+91${phone_number}`;
     }
 
-    // Send OTP via Twilio
-    await twilioService.sendOTP(phone_number);
+    // Comprehensive check for user existence
+    const existingUser = await db.query('SELECT * FROM users WHERE phone_number = $1', [phone_number]);
+    if (existingUser.rows.length > 0) {
+      const user = existingUser.rows[0];
+      if (user.phone_verified) {
+        res.status(400).json({ message: 'User with this phone number already exists. Please login.' });
+        return;
+      }
+      // If not verified, we can let them re-verify (OTP will be resent)
+      console.log('Unverified user found, resending OTP...');
+    }
 
-    res.status(200).json({ message: 'OTP sent successfully' });
+    try {
+      // Send OTP via Twilio
+      await twilioService.sendOTP(phone_number);
+      res.status(200).json({ message: 'OTP sent successfully', phone_number });
+    } catch (twilioError: any) {
+      console.error('Twilio Error:', twilioError);
+      
+      let errorMessage = 'Failed to send OTP. Please check your phone number.';
+      if (twilioError.status === 429) {
+        errorMessage = 'Too many requests. Please try again after some time.';
+      } else if (twilioError.code === 21614) {
+        errorMessage = 'The provided phone number is not a valid mobile number.';
+      } else if (twilioError.status === 401 || twilioError.status === 403) {
+        errorMessage = 'Verification service configuration error. Please contact support.';
+      }
+
+      res.status(twilioError.status || 500).json({ 
+        message: errorMessage,
+        error_code: twilioError.code
+      });
+    }
   } catch (error: any) {
     console.error('Signup error:', error);
-    res.status(500).json({ message: error.message || 'Error during signup' });
+    res.status(500).json({ message: 'Internal server error during signup' });
   }
 };
+
 
 export const verifyOTP = async (req: Request, res: Response): Promise<void> => {
   try {
