@@ -45,7 +45,21 @@ NEXT_PUBLIC_API_URL=http://localhost:8000
 Run the `database/schema.sql` on your PostgreSQL instance to set up the necessary tables:
 - `users`: User authentication data.
 - `medical_profiles`: Health records per user.
-- `ambulances`: Dispatch units.
-- `hospitals`: Medical facilities.
 - `emergency_requests`: Active SOS tracking.
+
+## Production Deployment (Render & Vercel)
+
+### Backend (Render)
+When deploying to Render, you **MUST** go to the "Environment" tab in your Render dashboard and manually add the following variables:
+- `DATABASE_URL`: Your Render PostgreSQL URL.
+- `JWT_SECRET`: A long random string.
+- `TWILIO_ACCOUNT_SID`: (From Twilio Dashboard)
+- `TWILIO_AUTH_TOKEN`: (From Twilio Dashboard)
+- `TWILIO_VERIFY_SERVICE_SID`: (From Twilio Verify Service)
+- `FRONTEND_URL`: `https://your-app.vercel.app`
+
+### Frontend (Vercel)
+In the Vercel project settings, add:
+- `NEXT_PUBLIC_API_URL`: `https://your-backend.onrender.com`
+
 
