@@ -1,6 +1,8 @@
 import { io } from 'socket.io-client';
+import { API_BASE_URL } from '@/config/api';
 
-const URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+const URL = API_BASE_URL;
+
 
 export const socket = io(URL, {
   autoConnect: false,

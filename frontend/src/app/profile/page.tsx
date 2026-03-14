@@ -4,6 +4,8 @@ import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { User, Activity, Shield, Phone, MapPin, Download, Edit3, PlusCircle, LogOut } from "lucide-react";
+import { API_ENDPOINTS } from "@/config/api";
+
 import QRCode from "qrcode";
 
 export default function ProfilePage() {
@@ -26,10 +28,10 @@ export default function ProfilePage() {
   const fetchProfile = async () => {
     try {
       const token = localStorage.getItem("token");
-      const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-      const response = await fetch(`${API_BASE}/api/profiles`, {
+      const response = await fetch(API_ENDPOINTS.PROFILE.BASE, {
         headers: { Authorization: `Bearer ${token}` }
       });
+
 
       if (response.status === 404) {
         setProfile(null);

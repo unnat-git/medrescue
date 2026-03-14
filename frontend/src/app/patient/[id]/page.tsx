@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { Activity, Shield, Heart, AlertCircle, Phone, User } from 'lucide-react';
+import { API_ENDPOINTS } from "@/config/api";
+
 
 export default function PatientProfile() {
   const { id } = useParams();
@@ -11,8 +13,8 @@ export default function PatientProfile() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-    fetch(`${API_BASE}/api/profiles/${id}`)
+    fetch(API_ENDPOINTS.PROFILE.PUBLIC(id as string))
+
       .then(res => {
         if (!res.ok) throw new Error("Profile not found");
         return res.json();

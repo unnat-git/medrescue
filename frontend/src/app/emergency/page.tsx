@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react';
 import { socket } from '@/services/socket';
 import MapComponent from '@/components/MapComponent';
+import { API_ENDPOINTS } from '@/config/api';
+
 
 export default function EmergencyRequest() {
   const [status, setStatus] = useState<'idle' | 'requesting' | 'assigned' | 'arriving'>('idle');
@@ -26,12 +28,12 @@ export default function EmergencyRequest() {
           setLocation({ lat, lng });
 
           try {
-            const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-            const res = await fetch(`${API_BASE}/api/emergency`, {
+            const res = await fetch(API_ENDPOINTS.EMERGENCY.BASE, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({ latitude: lat, longitude: lng, phone_number: '1234567890' })
             });
+
             const data = await res.json();
             if (res.ok) {
               setStatus('assigned');

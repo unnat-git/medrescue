@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 import { Activity, User, Mail, Lock, CheckCircle, AlertCircle, ArrowRight } from "lucide-react";
 import PhoneInput from 'react-phone-number-input';
 import 'react-phone-number-input/style.css';
+import { API_ENDPOINTS } from "@/config/api";
+
 
 export default function SignupPage() {
   const router = useRouter();
@@ -36,14 +38,14 @@ export default function SignupPage() {
     setLoading(true);
 
     try {
-      const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-      const response = await fetch(`${API_BASE}/api/auth/signup`, {
+      const response = await fetch(API_ENDPOINTS.AUTH.SIGNUP, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           phone_number: phoneNumber,
         }),
       });
+
 
       const data = await response.json();
 
@@ -105,8 +107,9 @@ export default function SignupPage() {
                   type="text"
                   required
                   className="block w-full pl-11 pr-4 py-4 bg-slate-50 border-none rounded-2xl text-slate-900 font-medium placeholder:text-slate-400 focus:ring-2 focus:ring-red-600 ring-offset-0 transition-all shadow-inner"
-                  placeholder="Siddharth Singh"
+                  placeholder=""
                   value={formData.full_name}
+
                   onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
                 />
               </div>
@@ -222,28 +225,44 @@ export default function SignupPage() {
           display: flex;
           align-items: center;
           width: 100%;
+          background: #f8fafc;
+          border-radius: 1rem;
+          padding: 0.5rem 1rem;
+          box-shadow: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
         }
         .PhoneInputInput {
           flex: 1;
           min-width: 0;
           background: transparent;
           border: none;
-          padding: 1rem 0;
+          padding: 0.75rem 0;
           font-family: inherit;
           font-size: 1rem;
-          font-weight: 500;
+          font-weight: 600;
           color: #0f172a;
           outline: none;
         }
         .PhoneInputCountry {
-          margin-right: 0.75rem;
+          margin-right: 1rem;
           display: flex;
           align-items: center;
+          background: white;
+          padding: 0.5rem;
+          border-radius: 0.75rem;
+          box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
         }
         .PhoneInputCountrySelect {
           cursor: pointer;
         }
+        .PhoneInputCountryIcon {
+            width: 1.5rem;
+            height: 1rem;
+            border-radius: 0.25rem;
+            overflow: hidden;
+            box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.1);
+        }
       `}</style>
+
     </div>
   );
 }

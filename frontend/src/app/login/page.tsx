@@ -4,6 +4,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Activity, Phone, Lock, ArrowRight } from "lucide-react";
+import { API_ENDPOINTS } from "@/config/api";
+
 
 export default function LoginPage() {
   const router = useRouter();
@@ -24,7 +26,7 @@ export default function LoginPage() {
     setError("");
 
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/auth/login`, {
+      const response = await fetch(API_ENDPOINTS.AUTH.LOGIN, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -32,6 +34,7 @@ export default function LoginPage() {
           password: formData.password,
         }),
       });
+
 
       const data = await response.json();
 

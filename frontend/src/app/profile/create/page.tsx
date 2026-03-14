@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Activity, Shield, User, Heart, AlertCircle, Phone, ArrowLeft } from 'lucide-react';
+import { API_ENDPOINTS } from "@/config/api";
+
 
 export default function CreateProfile() {
   const router = useRouter();
@@ -36,9 +38,7 @@ export default function CreateProfile() {
 
     try {
       const token = localStorage.getItem("token");
-      const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-      
-      const res = await fetch(`${API_BASE}/api/profiles`, {
+      const res = await fetch(API_ENDPOINTS.PROFILE.BASE, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json',
@@ -46,6 +46,7 @@ export default function CreateProfile() {
         },
         body: JSON.stringify(formData)
       });
+
 
       if (res.ok) {
         router.push('/profile');
