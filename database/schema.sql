@@ -1,15 +1,24 @@
-CREATE TABLE IF NOT EXISTS patients (
+CREATE TABLE IF NOT EXISTS users (
   id SERIAL PRIMARY KEY,
-  name VARCHAR(255) NOT NULL,
-  age INTEGER,
-  gender VARCHAR(50),
+  full_name VARCHAR(255) NOT NULL,
+  phone_number VARCHAR(50) UNIQUE NOT NULL,
+  email VARCHAR(255),
+  password_hash VARCHAR(255) NOT NULL,
+  phone_verified BOOLEAN DEFAULT FALSE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS medical_profiles (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER UNIQUE REFERENCES users(id) ON DELETE CASCADE,
   blood_group VARCHAR(10),
   allergies TEXT,
-  chronic_conditions TEXT,
-  current_medications TEXT,
-  past_surgeries TEXT,
-  emergency_contact VARCHAR(255),
-  doctor_name VARCHAR(255)
+  chronic_diseases TEXT,
+  medications TEXT,
+  emergency_contact_name VARCHAR(255),
+  emergency_contact_phone VARCHAR(50),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS ambulances (
@@ -30,7 +39,7 @@ CREATE TABLE IF NOT EXISTS hospitals (
 
 CREATE TABLE IF NOT EXISTS emergency_requests (
   id SERIAL PRIMARY KEY,
-  patient_id INTEGER REFERENCES patients(id),
+  profile_id INTEGER REFERENCES medical_profiles(id),
   latitude DOUBLE PRECISION NOT NULL,
   longitude DOUBLE PRECISION NOT NULL,
   ambulance_id INTEGER REFERENCES ambulances(id),
@@ -47,6 +56,7 @@ WHERE NOT EXISTS (SELECT 1 FROM ambulances WHERE driver_name = 'John Driver');
 INSERT INTO ambulances (driver_name, latitude, longitude, status)
 SELECT 'Mike Swift', 37.7849, -122.4094, 'available'
 WHERE NOT EXISTS (SELECT 1 FROM ambulances WHERE driver_name = 'Mike Swift');
+
 
 
 

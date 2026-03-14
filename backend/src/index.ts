@@ -8,9 +8,11 @@ import { Server } from 'socket.io';
 
 import db from './db';
 import emergencyRoutes from './routes/emergencyRoutes';
-import patientRoutes from './routes/patientRoutes';
+import authRoutes from './routes/authRoutes';
+import profileRoutes from './routes/profileRoutes';
 import hospitalRoutes from './routes/hospitalRoutes';
 import initDB from './init-db';
+
 
 const app = express();
 const server = http.createServer(app);
@@ -25,8 +27,10 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/api/emergency', emergencyRoutes);
-app.use('/api/patients', patientRoutes);
+app.use('/api/auth', authRoutes);
+app.use('/api/profiles', profileRoutes);
 app.use('/api/hospitals', hospitalRoutes);
+
 
 // Basic health check
 app.get('/health', (req, res) => {

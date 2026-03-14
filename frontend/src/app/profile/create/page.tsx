@@ -1,19 +1,29 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { Activity, Shield, User, Heart, AlertCircle, Phone, ArrowLeft } from 'lucide-react';
 
 export default function CreateProfile() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const [formData, setFormData] = useState({
-    name: '', age: '', gender: '', blood_group: '', allergies: '', 
-    chronic_conditions: '', current_medications: '', past_surgeries: '', 
-    emergency_contact: '', doctor_name: ''
+    blood_group: '', 
+    allergies: '', 
+    chronic_diseases: '', 
+    medications: '', 
+    emergency_contact_name: '', 
+    emergency_contact_phone: ''
   });
 
-  const inputStyle =
-    "w-full px-3 py-2 border border-gray-300 rounded-md bg-white text-black focus:outline-none focus:ring-2 focus:ring-red-500";
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      router.push("/login");
+    }
+  }, [router]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -22,109 +32,169 @@ export default function CreateProfile() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setError("");
+
     try {
+      const token = localStorage.getItem("token");
       const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-      const res = await fetch(`${API_BASE}/api/patients`, {
+      
+      const res = await fetch(`${API_BASE}/api/profiles`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...formData, age: parseInt(formData.age) })
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(formData)
       });
+
       if (res.ok) {
-        const data = await res.json();
-        alert('Profile created systematically! Redirecting to your Medical QR Code...');
-        router.push(`/patient/${data.patient.id}`);
+        router.push('/profile');
       } else {
-        alert('Error creating profile. Please check the backend connection.');
+        const data = await res.json();
+        setError(data.message || 'Error creating profile');
       }
-    } catch (error) {
-       console.error(error);
-       alert('Network error contacting backend.');
+    } catch (err) {
+       console.error(err);
+       setError('Network error contacting backend.');
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-red-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto p-8 md:p-12">
-        <div className="text-center mb-10 bg-red-600 rounded-2xl p-6 shadow-md text-white">
-          <h2 className="text-5xl font-extrabold mb-3 tracking-tight">Digital Medical Identity</h2>
-          <p className="text-red-100 text-lg font-medium">Create your MedRescue profile for rapid emergency response.</p>
+    <div className="min-h-screen bg-slate-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-3xl mx-auto">
+        <div className="flex items-center justify-between mb-8">
+            <Link href="/profile" className="flex items-center gap-2 text-slate-500 hover:text-slate-900 transition-colors">
+                <ArrowLeft className="h-5 w-5" />
+                <span className="font-medium">Back to Dashboard</span>
+            </Link>
+            <div className="flex items-center gap-2">
+                <Activity className="h-6 w-6 text-red-600" />
+                <span className="font-bold text-xl text-slate-900 tracking-tight">MedRescue</span>
+            </div>
         </div>
-        
-        <form onSubmit={handleSubmit} className="space-y-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="col-span-1 md:col-span-2 space-y-2">
-              <label className="text-sm font-bold text-slate-700">Full Name</label>
-              <input required name="name" onChange={handleChange} value={formData.name} className={inputStyle} placeholder="John Doe" />
+
+        <div className="bg-white rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-100 overflow-hidden">
+            <div className="bg-red-600 p-8 text-white relative overflow-hidden">
+                <Shield className="absolute -right-4 -bottom-4 h-32 w-32 text-white/10 rotate-12" />
+                <h1 className="text-3xl font-extrabold relative z-10">Complete Your Medical Profile</h1>
+                <p className="text-red-100 mt-2 relative z-10">This information will be encoded in your emergency QR code.</p>
             </div>
 
-            <div className="space-y-2">
-              <label className="text-sm font-bold text-slate-700">Age</label>
-              <input required type="number" name="age" onChange={handleChange} value={formData.age} className={inputStyle} placeholder="32" />
-            </div>
+            <form onSubmit={handleSubmit} className="p-8 space-y-8">
+                {error && (
+                    <div className="bg-red-50 border border-red-100 text-red-600 px-4 py-3 rounded-xl text-sm font-medium flex items-center gap-2">
+                        <AlertCircle className="h-5 w-5" />
+                        {error}
+                    </div>
+                )}
 
-            <div className="space-y-2">
-              <label className="text-sm font-bold text-slate-700">Gender</label>
-              <select required name="gender" onChange={handleChange} value={formData.gender} className={inputStyle}>
-                <option value="">Select Gender</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Other">Other</option>
-              </select>
-            </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="space-y-2">
+                        <label className="text-sm font-bold text-slate-700 uppercase tracking-wider flex items-center gap-2">
+                            <Heart className="h-4 w-4 text-red-500" />
+                            Blood Group
+                        </label>
+                        <select 
+                            required 
+                            name="blood_group" 
+                            onChange={handleChange} 
+                            value={formData.blood_group} 
+                            className="w-full px-4 py-3 border border-slate-200 rounded-xl bg-slate-50 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all"
+                        >
+                            <option value="">Select Blood Group</option>
+                            {["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"].map(bg => (
+                                <option key={bg} value={bg}>{bg}</option>
+                            ))}
+                        </select>
+                    </div>
 
-            <div className="space-y-2">
-              <label className="text-sm font-bold text-slate-700">Blood Group</label>
-              <select required name="blood_group" onChange={handleChange} value={formData.blood_group} className={inputStyle}>
-                <option value="">Select Blood Group</option>
-                <option value="A+">A+</option>
-                <option value="A-">A-</option>
-                <option value="B+">B+</option>
-                <option value="B-">B-</option>
-                <option value="O+">O+</option>
-                <option value="O-">O-</option>
-                <option value="AB+">AB+</option>
-                <option value="AB-">AB-</option>
-              </select>
-            </div>
+                    <div className="space-y-2">
+                        <label className="text-sm font-bold text-slate-700 uppercase tracking-wider flex items-center gap-2">
+                            <User className="h-4 w-4 text-blue-500" />
+                            Emergency Contact Name
+                        </label>
+                        <input 
+                            required 
+                            name="emergency_contact_name" 
+                            onChange={handleChange} 
+                            value={formData.emergency_contact_name} 
+                            className="w-full px-4 py-3 border border-slate-200 rounded-xl bg-slate-50 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all" 
+                            placeholder="e.g. Jane Doe (Wife)" 
+                        />
+                    </div>
 
-            <div className="space-y-2">
-              <label className="text-sm font-bold text-slate-700">Emergency Contact</label>
-              <input required name="emergency_contact" onChange={handleChange} value={formData.emergency_contact} className={inputStyle} placeholder="Phone Number" />
-            </div>
+                    <div className="space-y-2">
+                        <label className="text-sm font-bold text-slate-700 uppercase tracking-wider flex items-center gap-2">
+                            <Phone className="h-4 w-4 text-blue-500" />
+                            Emergency Contact Phone
+                        </label>
+                        <input 
+                            required 
+                            name="emergency_contact_phone" 
+                            onChange={handleChange} 
+                            value={formData.emergency_contact_phone} 
+                            className="w-full px-4 py-3 border border-slate-200 rounded-xl bg-slate-50 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all" 
+                            placeholder="+91XXXXXXXXXX" 
+                        />
+                    </div>
+                </div>
 
-            <div className="col-span-1 md:col-span-2 space-y-2">
-              <label className="text-sm font-bold text-slate-700">Allergies</label>
-              <textarea name="allergies" onChange={handleChange} value={formData.allergies} rows={2} className={`${inputStyle} resize-none`} placeholder="E.g. Penicillin, Peanuts (or 'None')"></textarea>
-            </div>
+                <div className="space-y-6">
+                    <div className="space-y-2">
+                        <label className="text-sm font-bold text-slate-700 uppercase tracking-wider flex items-center gap-2">
+                            <AlertCircle className="h-4 w-4 text-amber-500" />
+                            Allergies
+                        </label>
+                        <textarea 
+                            name="allergies" 
+                            onChange={handleChange} 
+                            value={formData.allergies} 
+                            rows={2} 
+                            className="w-full px-4 py-3 border border-slate-200 rounded-xl bg-slate-50 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all resize-none" 
+                            placeholder="e.g. Penicillin, Peanuts (or 'None')"
+                        ></textarea>
+                    </div>
 
-            <div className="col-span-1 md:col-span-2 space-y-2">
-              <label className="text-sm font-bold text-slate-700">Chronic Conditions</label>
-              <textarea name="chronic_conditions" onChange={handleChange} value={formData.chronic_conditions} rows={2} className={`${inputStyle} resize-none`} placeholder="E.g. Type 2 Diabetes, Asthma"></textarea>
-            </div>
+                    <div className="space-y-2">
+                        <label className="text-sm font-bold text-slate-700 uppercase tracking-wider flex items-center gap-2">
+                            Chronic Diseases
+                        </label>
+                        <textarea 
+                            name="chronic_diseases" 
+                            onChange={handleChange} 
+                            value={formData.chronic_diseases} 
+                            rows={2} 
+                            className="w-full px-4 py-3 border border-slate-200 rounded-xl bg-slate-50 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all resize-none" 
+                            placeholder="e.g. Type 2 Diabetes, Asthma"
+                        ></textarea>
+                    </div>
 
-            <div className="col-span-1 md:col-span-2 space-y-2">
-              <label className="text-sm font-bold text-slate-700">Current Medications & Past Surgeries</label>
-              <textarea name="current_medications" onChange={handleChange} value={formData.current_medications} rows={3} className={`${inputStyle} resize-none`} placeholder="Medications, dosages, and relevant medical history..."></textarea>
-            </div>
-            
-            <div className="col-span-1 md:col-span-2 space-y-2">
-              <label className="text-sm font-bold text-slate-700">Primary Doctor Name (Optional)</label>
-              <input name="doctor_name" onChange={handleChange} value={formData.doctor_name} className={inputStyle} placeholder="Dr. Smith" />
-            </div>
-          </div>
+                    <div className="space-y-2">
+                        <label className="text-sm font-bold text-slate-700 uppercase tracking-wider flex items-center gap-2">
+                            Current Medications
+                        </label>
+                        <textarea 
+                            name="medications" 
+                            onChange={handleChange} 
+                            value={formData.medications} 
+                            rows={3} 
+                            className="w-full px-4 py-3 border border-slate-200 rounded-xl bg-slate-50 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all resize-none" 
+                            placeholder="List medications and dosages..."
+                        ></textarea>
+                    </div>
+                </div>
 
-          <div className="pt-6">
-            <button 
-              disabled={loading}
-              type="submit" 
-              className="w-full bg-red-600 hover:bg-red-700 text-white font-bold text-lg py-5 rounded-2xl shadow-lg shadow-red-500/30 transition disabled:opacity-70 disabled:cursor-not-allowed"
-            >
-              {loading ? 'Creating Profile...' : 'Create & Generate QR ID'}
-            </button>
-          </div>
-        </form>
+                <button 
+                    disabled={loading}
+                    type="submit" 
+                    className="w-full bg-red-600 hover:bg-red-700 text-white font-bold text-xl py-4 rounded-2xl shadow-lg shadow-red-200 transition-all transform hover:-translate-y-1 active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed"
+                >
+                    {loading ? 'Creating Profile...' : 'Save & Generate QR Identity'}
+                </button>
+            </form>
+        </div>
       </div>
     </div>
   );

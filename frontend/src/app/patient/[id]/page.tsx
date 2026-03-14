@@ -2,23 +2,28 @@
 
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
+import { Activity, Shield, Heart, AlertCircle, Phone, User } from 'lucide-react';
 
 export default function PatientProfile() {
   const { id } = useParams();
-  const [patient, setPatient] = useState<any>(null);
+  const [profile, setProfile] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
-    // Fetch patient data from backend
     const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
-    fetch(`${API_BASE}/api/patients/${id}`)
-      .then(res => res.json())
+    fetch(`${API_BASE}/api/profiles/${id}`)
+      .then(res => {
+        if (!res.ok) throw new Error("Profile not found");
+        return res.json();
+      })
       .then(data => {
-        setPatient(data);
+        setProfile(data);
         setLoading(false);
       })
       .catch(err => {
         console.error(err);
+        setError(err.message);
         setLoading(false);
       });
   }, [id]);
@@ -26,80 +31,102 @@ export default function PatientProfile() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center flex-col bg-slate-50">
-        <div className="w-16 h-16 border-4 border-red-600 border-t-transparent rounded-full animate-spin"></div>
-        <p className="mt-4 text-slate-500 font-medium">Loading Profile...</p>
+        <Activity className="h-12 w-12 text-red-600 animate-pulse" />
+        <p className="mt-4 text-slate-500 font-medium tracking-wide">Accessing Emergency Data...</p>
       </div>
     );
   }
 
-  if (!patient || patient.message === 'Patient not found') {
-    return <div className="min-h-screen flex items-center justify-center text-red-500 text-xl font-bold bg-slate-50">Patient not found</div>;
+  if (error || !profile) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-slate-50 px-4">
+        <div className="bg-white rounded-3xl p-8 shadow-xl max-w-md text-center border border-slate-100">
+            <div className="w-16 h-16 bg-red-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <AlertCircle className="h-8 w-8 text-red-600" />
+            </div>
+            <h2 className="text-2xl font-bold text-slate-900">Profile Not Found</h2>
+            <p className="text-slate-500 mt-2">The medical identity you are looking for does not exist or has been removed.</p>
+        </div>
+      </div>
+    );
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 py-12 px-4 sm:px-6">
-      <div className="max-w-2xl mx-auto">
-        {/* QR Code section */}
-        <div className="bg-white rounded-3xl shadow-lg border border-red-100 overflow-hidden mb-8 transform transition duration-500 hover:scale-[1.01]">
-          <div className="bg-red-600 px-6 py-8 text-center text-white">
-            <h2 className="text-4xl font-extrabold tracking-tight">{patient.name}</h2>
-            <p className="text-red-100 mt-2 font-medium">Emergency Medical Profile</p>
+    <div className="min-h-screen bg-slate-50 py-8 px-4 sm:px-6">
+      <div className="max-w-2xl mx-auto space-y-6">
+        <div className="bg-red-600 rounded-[2.5rem] shadow-2xl shadow-red-200 overflow-hidden transform transition duration-500 hover:scale-[1.01]">
+          <div className="px-8 py-10 text-center text-white relative">
+            <Shield className="absolute top-4 right-4 h-8 w-8 text-white/20" />
+            <h2 className="text-4xl font-black tracking-tight mb-2">{profile.full_name}</h2>
+            <p className="text-red-100 font-bold uppercase tracking-widest text-sm">Emergency Medical Profile</p>
           </div>
-          <div className="p-8 flex flex-col items-center">
-             <div className="w-56 h-56 bg-white border-4 border-red-100 rounded-2xl flex items-center justify-center mb-6 shadow-inner relative overflow-hidden group">
-               {/* Placeholder for actual rendering of QR code */}
-               <img 
-                 src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://medrescue.app/patient/${id}`} 
-                 alt="QR Code" 
-                 className="w-48 h-48 opacity-90 group-hover:opacity-100 transition" 
-               />
-             </div>
-             <p className="text-slate-500 text-center text-sm max-w-sm">
-               Scan this code to instantly access critical medical history for emergency responders.
-             </p>
+          
+          <div className="bg-white p-8 grid grid-cols-2 gap-6">
+            <div className="bg-red-50 border border-red-100 p-6 rounded-3xl flex flex-col items-center justify-center shadow-inner">
+              <p className="text-slate-400 text-xs font-bold uppercase tracking-widest mb-2">Blood Group</p>
+              <p className="text-5xl font-black text-red-600">{profile.blood_group}</p>
+            </div>
+            <div className="bg-slate-50 p-6 rounded-3xl flex flex-col justify-center shadow-inner">
+              <p className="text-slate-400 text-xs font-bold uppercase tracking-widest mb-2 flex items-center gap-2">
+                <User className="h-3 w-3" />
+                Patient ID
+              </p>
+              <p className="text-2xl font-bold text-slate-800">#{profile.id.toString().padStart(5, '0')}</p>
+            </div>
           </div>
         </div>
 
-        {/* Patient Details */}
-        <div className="bg-white rounded-3xl shadow-sm border border-gray-100 p-8 space-y-8">
-          <div className="grid grid-cols-2 gap-4">
-            <div className="bg-red-50 border border-red-100 p-5 rounded-2xl flex flex-col items-center justify-center">
-              <p className="text-slate-500 text-sm font-semibold mb-1 text-center">Blood Group</p>
-              <p className="text-4xl font-extrabold text-red-600">{patient.blood_group}</p>
+        <div className="bg-white rounded-[2.5rem] shadow-xl shadow-slate-200/50 border border-slate-100 p-8 space-y-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="space-y-2">
+               <p className="text-slate-400 text-xs font-bold uppercase tracking-widest flex items-center gap-2 px-1">
+                 <AlertCircle className="h-3 w-3 text-amber-500" />
+                 Allergies
+               </p>
+               <div className={`p-4 rounded-2xl border font-bold text-lg ${profile.allergies ? 'bg-red-50 text-red-900 border-red-100' : 'bg-slate-50 text-slate-400 border-slate-100'}`}>
+                 {profile.allergies || 'No known allergies'}
+               </div>
             </div>
-            <div className="bg-slate-50 p-5 rounded-2xl flex flex-col justify-center">
-              <p className="text-slate-500 text-sm font-semibold mb-1">Age / Gender</p>
-              <p className="text-2xl font-bold text-slate-800">{patient.age} / {patient.gender}</p>
+
+            <div className="space-y-2">
+               <p className="text-slate-400 text-xs font-bold uppercase tracking-widest flex items-center gap-2 px-1 text-slate-500">
+                 Chronic Diseases
+               </p>
+               <p className="text-lg text-slate-800 font-bold p-1">{profile.chronic_diseases || 'None reported'}</p>
             </div>
           </div>
 
-          <div className="space-y-5 px-2">
-            <div>
-              <p className="text-slate-500 text-sm font-bold uppercase tracking-wider mb-2">Allergies</p>
-              <p className="text-lg font-medium text-slate-900 bg-red-50 p-4 rounded-xl border border-red-100">{patient.allergies || 'None'}</p>
+          <div className="space-y-3">
+            <p className="text-slate-400 text-xs font-bold uppercase tracking-widest flex items-center gap-2 px-1">
+              Current Medications
+            </p>
+            <div className="bg-slate-50/50 p-5 rounded-3xl border border-slate-100">
+              <p className="text-lg text-slate-800 font-medium whitespace-pre-wrap">{profile.medications || 'None reported'}</p>
             </div>
-            <div>
-              <p className="text-slate-500 text-sm font-bold uppercase tracking-wider mb-2">Chronic Conditions</p>
-              <p className="text-lg text-slate-800 font-medium">{patient.chronic_conditions || 'None known'}</p>
+          </div>
+
+          <div className="pt-8 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-2 gap-8">
+            <div className="space-y-1">
+              <p className="text-slate-400 text-xs font-bold uppercase tracking-widest flex items-center gap-2">
+                <Phone className="h-3 w-3 text-blue-500" />
+                Emergency Contact
+              </p>
+              <p className="text-xl font-black text-slate-900">{profile.emergency_contact_name}</p>
+              <p className="text-blue-600 font-bold text-lg">{profile.emergency_contact_phone}</p>
             </div>
-            <div>
-              <p className="text-slate-500 text-sm font-bold uppercase tracking-wider mb-2">Medications & Surgeries</p>
-              <p className="text-lg text-slate-800 font-medium">{patient.current_medications || 'None known'}</p>
-            </div>
-            <div className="pt-6 border-t border-gray-100 mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <p className="text-slate-500 text-xs font-bold uppercase tracking-wider mb-1">Emergency Contact</p>
-                <p className="text-xl font-bold text-slate-900">{patient.emergency_contact}</p>
-              </div>
-              {patient.doctor_name && (
-                <div>
-                  <p className="text-slate-500 text-xs font-bold uppercase tracking-wider mb-1">Primary Care</p>
-                  <p className="text-xl font-bold text-slate-900">{patient.doctor_name}</p>
+            
+            <div className="flex items-end justify-end">
+                <div className="bg-slate-900 text-white px-6 py-3 rounded-2xl flex items-center gap-3">
+                    <Activity className="h-5 w-5 text-red-500" />
+                    <span className="font-bold tracking-tight">MedRescue Verified</span>
                 </div>
-              )}
             </div>
           </div>
         </div>
+        
+        <p className="text-center text-slate-400 text-sm font-medium">
+            This information is provided for emergency medical response only.
+        </p>
       </div>
     </div>
   );

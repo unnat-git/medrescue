@@ -13,3 +13,38 @@ MedRescue modernizes emergency medical services by offering:
 - **Live Real-time Tracking:** Provides live Socket.IO-powered tracking so users, hospitals, and dispatchers can monitor the ambulance's route in real-time, providing peace of mind and better preparedness.
 - **Instant Access to Medical Profiles:** Users can generate secure MedRescue QR codes linking to their vital medical IDs. In an emergency, first responders can scan the QR code to instantly access critical health data before administering treatment.
 - **Comprehensive Dashboards:** Tailored interfaces for Ambulance Drivers to manage ride requests and for Hospitals to prepare for incoming patients, ensuring a synchronized and efficient operational flow.
+- **OTP-Verified Authentication:** Secure user signup and login using Twilio Verify API for phone number verification.
+
+## Getting Started
+
+### Prerequisites
+- Node.js (v18+)
+- PostgreSQL
+- Twilio Account
+
+### Environment Variables
+
+#### Backend (`backend/.env`)
+```env
+DATABASE_URL=postgresql://user:password@localhost:5432/medrescue
+PORT=8000
+JWT_SECRET=your_jwt_secret
+TWILIO_ACCOUNT_SID=your_sid
+TWILIO_AUTH_TOKEN=your_token
+TWILIO_VERIFY_SERVICE_SID=your_verify_service_sid
+FRONTEND_URL=http://localhost:3000
+```
+
+#### Frontend (`frontend/.env.local`)
+```env
+NEXT_PUBLIC_API_URL=http://localhost:8000
+```
+
+## Database Setup
+Run the `database/schema.sql` on your PostgreSQL instance to set up the necessary tables:
+- `users`: User authentication data.
+- `medical_profiles`: Health records per user.
+- `ambulances`: Dispatch units.
+- `hospitals`: Medical facilities.
+- `emergency_requests`: Active SOS tracking.
+

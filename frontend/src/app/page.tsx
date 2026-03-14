@@ -1,7 +1,16 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Activity } from "lucide-react";
+import { Activity, LogIn, UserPlus } from "lucide-react";
 
 export default function Home() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    setIsLoggedIn(!!localStorage.getItem("token"));
+  }, []);
+
   return (
     <div className="flex flex-col min-h-screen bg-white text-slate-900">
       <header className="px-4 lg:px-6 h-16 flex items-center border-b border-gray-100 shadow-sm sticky top-0 bg-white z-50">
@@ -9,7 +18,7 @@ export default function Home() {
           <Activity className="h-6 w-6 text-red-600" />
           <span className="ml-2 font-bold text-xl tracking-tight text-gray-900">MedRescue</span>
         </Link>
-        <nav className="ml-auto flex gap-4 sm:gap-6">
+        <nav className="ml-auto flex gap-4 sm:gap-6 items-center">
           <Link className="text-sm font-medium hover:text-red-600 transition-colors" href="/profile">
             Medical Profile
           </Link>
@@ -19,7 +28,24 @@ export default function Home() {
           <Link className="text-sm font-medium hover:text-red-600 transition-colors" href="/hospital">
             Hospital
           </Link>
+          {!isLoggedIn ? (
+            <>
+              <Link href="/login" className="text-sm font-bold text-slate-700 hover:text-red-600 transition-colors flex items-center gap-1">
+                <LogIn className="h-4 w-4" />
+                Login
+              </Link>
+              <Link href="/signup" className="text-sm font-bold text-white bg-red-600 px-4 py-2 rounded-lg hover:bg-red-700 transition-colors flex items-center gap-1 shadow-md shadow-red-200">
+                <UserPlus className="h-4 w-4" />
+                Sign Up
+              </Link>
+            </>
+          ) : (
+            <Link href="/profile" className="w-8 h-8 rounded-full bg-slate-900 flex items-center justify-center text-white">
+               <Activity className="h-4 w-4" />
+            </Link>
+          )}
         </nav>
+
       </header>
       <main className="flex-1 flex flex-col items-center justify-center text-center px-4">
         <div className="space-y-6 max-w-3xl">
