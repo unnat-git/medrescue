@@ -103,7 +103,7 @@ export default function CreateProfile() {
                             name="blood_group" 
                             onChange={handleChange} 
                             value={formData.blood_group} 
-                            className="w-full px-4 py-3 border border-slate-200 rounded-xl bg-slate-50 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all"
+                            className="w-full px-4 py-3 border border-slate-200 rounded-xl bg-slate-50 text-slate-900 font-medium placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all"
                         >
                             <option value="">Select Blood Group</option>
                             {["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"].map(bg => (
@@ -122,7 +122,7 @@ export default function CreateProfile() {
                             name="emergency_contact_name" 
                             onChange={handleChange} 
                             value={formData.emergency_contact_name} 
-                            className="w-full px-4 py-3 border border-slate-200 rounded-xl bg-slate-50 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all" 
+                            className="w-full px-4 py-3 border border-slate-200 rounded-xl bg-slate-50 text-slate-900 font-medium placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all" 
                             placeholder="e.g. Jane Doe (Wife)" 
                         />
                     </div>
@@ -137,7 +137,7 @@ export default function CreateProfile() {
                             name="emergency_contact_phone" 
                             onChange={handleChange} 
                             value={formData.emergency_contact_phone} 
-                            className="w-full px-4 py-3 border border-slate-200 rounded-xl bg-slate-50 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all" 
+                            className="w-full px-4 py-3 border border-slate-200 rounded-xl bg-slate-50 text-slate-900 font-medium placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all" 
                             placeholder="+91XXXXXXXXXX" 
                         />
                     </div>
@@ -154,7 +154,7 @@ export default function CreateProfile() {
                             onChange={handleChange} 
                             value={formData.allergies} 
                             rows={2} 
-                            className="w-full px-4 py-3 border border-slate-200 rounded-xl bg-slate-50 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all resize-none" 
+                            className="w-full px-4 py-3 border border-slate-200 rounded-xl bg-slate-50 text-slate-900 font-medium placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all resize-none" 
                             placeholder="e.g. Penicillin, Peanuts (or 'None')"
                         ></textarea>
                     </div>
@@ -168,7 +168,7 @@ export default function CreateProfile() {
                             onChange={handleChange} 
                             value={formData.chronic_diseases} 
                             rows={2} 
-                            className="w-full px-4 py-3 border border-slate-200 rounded-xl bg-slate-50 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all resize-none" 
+                            className="w-full px-4 py-3 border border-slate-200 rounded-xl bg-slate-50 text-slate-900 font-medium placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all resize-none" 
                             placeholder="e.g. Type 2 Diabetes, Asthma"
                         ></textarea>
                     </div>
@@ -182,7 +182,7 @@ export default function CreateProfile() {
                             onChange={handleChange} 
                             value={formData.medications} 
                             rows={3} 
-                            className="w-full px-4 py-3 border border-slate-200 rounded-xl bg-slate-50 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all resize-none" 
+                            className="w-full px-4 py-3 border border-slate-200 rounded-xl bg-slate-50 text-slate-900 font-medium placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all resize-none" 
                             placeholder="List medications and dosages..."
                         ></textarea>
                     </div>
