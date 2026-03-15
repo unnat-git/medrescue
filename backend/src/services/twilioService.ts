@@ -4,9 +4,9 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const getTwilioConfig = () => {
-  const accountSid = process.env.TWILIO_ACCOUNT_SID;
-  const authToken = process.env.TWILIO_AUTH_TOKEN;
-  const verifyServiceSid = process.env.TWILIO_VERIFY_SERVICE_SID;
+  const accountSid = process.env.TWILIO_ACCOUNT_SID?.trim();
+  const authToken = process.env.TWILIO_AUTH_TOKEN?.trim();
+  const verifyServiceSid = process.env.TWILIO_VERIFY_SERVICE_SID?.trim();
 
   if (!accountSid || !authToken || !verifyServiceSid) {
     const missing = [];
@@ -14,10 +14,11 @@ const getTwilioConfig = () => {
     if (!authToken) missing.push('TWILIO_AUTH_TOKEN');
     if (!verifyServiceSid) missing.push('TWILIO_VERIFY_SERVICE_SID');
     
-    throw new Error(`Twilio configuration is incomplete. Missing: ${missing.join(', ')}. Please add these variables to your Render/Deployment environment.`);
+    throw new Error(`Twilio configuration is incomplete. Missing: ${missing.join(', ')}. Please add these variables to your Render environment.`);
   }
 
   return { accountSid, authToken, verifyServiceSid };
+
 };
 
 

@@ -48,8 +48,9 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
       } else if (twilioError.code === 21614) {
         errorMessage = 'The provided phone number is not a valid mobile number.';
       } else if (twilioError.status === 401 || twilioError.status === 403) {
-        errorMessage = 'Verification service configuration error. Please contact support.';
+        errorMessage = 'Twilio Authentication Error: Please check your Account SID and Auth Token in Render environment variables.';
       }
+
 
       res.status(twilioError.status || 500).json({ 
         message: errorMessage,
