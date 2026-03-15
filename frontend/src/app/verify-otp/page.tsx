@@ -124,6 +124,7 @@ export default function VerifyOTPPage() {
                 type="text"
                 maxLength={6}
                 required
+                autoFocus
                 className="block w-full pl-12 pr-4 py-5 bg-slate-50 border-none rounded-2xl text-slate-900 text-2xl font-black tracking-[0.5em] text-center placeholder:text-slate-300 focus:ring-4 focus:ring-red-600/10 ring-offset-0 transition-all shadow-inner"
                 placeholder="Enter the verification code"
                 value={otp}
@@ -135,7 +136,7 @@ export default function VerifyOTPPage() {
             <div className="space-y-4">
               <button
                 type="submit"
-                disabled={loading || otp.length < 6}
+                disabled={loading || otp.length < 4}
                 className="w-full flex justify-center items-center py-5 px-4 border border-transparent rounded-2xl shadow-xl shadow-red-200 text-lg font-black text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-all transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed group"
               >
                 {loading ? (
