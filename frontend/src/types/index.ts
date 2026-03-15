@@ -15,6 +15,7 @@ export interface SignupData {
 export interface MedicalProfile {
   id: number;
   user_id: number;
+  patient_id: string;
   full_name: string;
   blood_group: string;
   allergies?: string;

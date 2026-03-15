@@ -4,20 +4,17 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { Activity, Shield, Heart, AlertCircle, Phone, User } from 'lucide-react';
 import { API_ENDPOINTS } from "@/config/api";
-import { MedicalProfile } from "@/types";
-
-
 
 export default function PatientProfile() {
-  const { id } = useParams();
-  const [profile, setProfile] = useState<MedicalProfile | null>(null);
+  const { patient_id } = useParams();
+  const [profile, setProfile] = useState<any>(null);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    fetch(API_ENDPOINTS.PROFILE.PUBLIC(id as string))
-
+    if (!patient_id) return;
+    fetch(API_ENDPOINTS.PROFILE.PUBLIC(patient_id as string))
       .then(res => {
         if (!res.ok) throw new Error("Profile not found");
         return res.json();
@@ -31,7 +28,7 @@ export default function PatientProfile() {
         setError(err.message);
         setLoading(false);
       });
-  }, [id]);
+  }, [patient_id]);
 
   if (loading) {
     return (
@@ -71,12 +68,12 @@ export default function PatientProfile() {
               <p className="text-slate-400 text-xs font-bold uppercase tracking-widest mb-2">Blood Group</p>
               <p className="text-5xl font-black text-red-600">{profile.blood_group}</p>
             </div>
-            <div className="bg-slate-50 p-6 rounded-3xl flex flex-col justify-center shadow-inner">
+            <div className="bg-slate-50 p-6 rounded-3xl flex flex-col justify-center shadow-inner overflow-hidden">
               <p className="text-slate-400 text-xs font-bold uppercase tracking-widest mb-2 flex items-center gap-2">
                 <User className="h-3 w-3" />
                 Patient ID
               </p>
-              <p className="text-2xl font-bold text-slate-800">#{profile.id.toString().padStart(5, '0')}</p>
+              <p className="text-xl font-bold text-slate-800 break-all">{profile.patient_id}</p>
             </div>
           </div>
         </div>
@@ -97,7 +94,9 @@ export default function PatientProfile() {
                <p className="text-slate-400 text-xs font-bold uppercase tracking-widest flex items-center gap-2 px-1 text-slate-500">
                  Chronic Diseases
                </p>
-               <p className="text-lg text-slate-800 font-bold p-1">{profile.chronic_diseases || 'None reported'}</p>
+               <div className="bg-slate-50/50 p-4 rounded-2xl border border-slate-100">
+                  <p className="text-lg text-slate-800 font-bold">{profile.chronic_diseases || 'None reported'}</p>
+               </div>
             </div>
           </div>
 

@@ -15,7 +15,7 @@ export const API_ENDPOINTS = {
   },
   PROFILE: {
     BASE: `${API_BASE_URL}/api/profiles`,
-    PUBLIC: (id: string) => `${API_BASE_URL}/api/profiles/${id}`,
+    PUBLIC: (id: string) => `${API_BASE_URL}/api/profiles/public/${id}`,
   },
   EMERGENCY: {
     BASE: `${API_BASE_URL}/api/emergency`,

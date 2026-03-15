@@ -40,7 +40,7 @@ export default function ProfilePage() {
       } else if (response.ok) {
         const data = await response.json();
         setProfile(data);
-        generateQRCode(data.id);
+        generateQRCode(data.patient_id);
       }
     } catch (err) {
       console.error("Error fetching profile:", err);
@@ -49,10 +49,10 @@ export default function ProfilePage() {
     }
   };
 
-  const generateQRCode = async (profileId: number) => {
+  const generateQRCode = async (patientId: string) => {
     try {
-      // Encode either the profile ID or a full URL
-      const url = `${window.location.origin}/patient/${profileId}`;
+      // Encode the full public patient URL
+      const url = `${window.location.origin}/patient/${patientId}`;
       const qrDataUrl = await QRCode.toDataURL(url, {
         width: 400,
         margin: 2,
@@ -76,7 +76,7 @@ export default function ProfilePage() {
   const downloadQR = () => {
     if (qrRef.current && qrCodeUrl) {
       qrRef.current.href = qrCodeUrl;
-      qrRef.current.download = `medrescue-qr-${profile?.id}.png`;
+      qrRef.current.download = `medrescue-qr-${profile?.patient_id}.png`;
       qrRef.current.click();
     }
   };
@@ -109,7 +109,7 @@ export default function ProfilePage() {
               <User className="h-5 w-5 text-white" />
             </div>
             <span className="font-semibold text-slate-700 hidden sm:block">
-              {profile ? `Patient ID: #${profile.id.toString().padStart(5, '0')}` : "User Dashboard"}
+              {profile ? `Patient ID: ${profile.patient_id}` : "User Dashboard"}
             </span>
           </div>
         </div>
@@ -221,19 +221,7 @@ export default function ProfilePage() {
                 </div>
               </div>
 
-              <div className="bg-white rounded-3xl p-8 shadow-sm border border-slate-100 flex flex-col items-center text-center">
-                  <div className="w-16 h-16 bg-red-50 rounded-2xl flex items-center justify-center mb-4">
-                      <MapPin className="h-8 w-8 text-red-600" />
-                  </div>
-                  <h4 className="font-bold text-slate-900">Nearby Hospitals</h4>
-                  <p className="text-sm text-slate-500 mt-2 mb-6">Find the closest medical facilities in case of self-transport.</p>
-                  <Link 
-                    href="/hospitals-nearby" 
-                    className="w-full py-3 bg-slate-50 hover:bg-slate-100 text-slate-900 rounded-xl text-sm font-bold transition-colors"
-                  >
-                    View Map
-                  </Link>
-              </div>
+
             </div>
           </div>
         )}

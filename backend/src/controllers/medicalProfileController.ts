@@ -1,6 +1,21 @@
 import { Response } from 'express';
 import db from '../db';
 import { AuthRequest } from '../utils/authMiddleware';
+import crypto from 'crypto';
+
+const generatePatientId = async (): Promise<string> => {
+  let patientId = '';
+  let isUnique = false;
+  
+  while (!isUnique) {
+    patientId = `PAT-${crypto.randomBytes(3).toString('hex').toUpperCase()}`;
+    const check = await db.query('SELECT 1 FROM medical_profiles WHERE patient_id = $1', [patientId]);
+    if (check.rows.length === 0) {
+      isUnique = true;
+    }
+  }
+  return patientId;
+};
 
 export const createProfile = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
@@ -15,15 +30,16 @@ export const createProfile = async (req: AuthRequest, res: Response): Promise<vo
     // Check if profile already exists
     const existing = await db.query('SELECT id FROM medical_profiles WHERE user_id = $1', [userId]);
     if (existing.rows.length > 0) {
-      // If profile exists, treat as update or return error
       res.status(400).json({ message: 'Medical profile already exists for this user. Please use update instead.' });
       return;
     }
 
+    const patient_id = await generatePatientId();
+
     const result = await db.query(
-      `INSERT INTO medical_profiles (user_id, blood_group, allergies, chronic_diseases, medications, emergency_contact_name, emergency_contact_phone)
-       VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *`,
-      [userId, blood_group, allergies, chronic_diseases, medications, emergency_contact_name, emergency_contact_phone]
+      `INSERT INTO medical_profiles (user_id, patient_id, blood_group, allergies, chronic_diseases, medications, emergency_contact_name, emergency_contact_phone)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`,
+      [userId, patient_id, blood_group, allergies, chronic_diseases, medications, emergency_contact_name, emergency_contact_phone]
     );
 
     res.status(201).json({ message: 'Medical profile created successfully', profile: result.rows[0] });
@@ -87,12 +103,13 @@ export const getProfile = async (req: AuthRequest, res: Response): Promise<void>
 
 export const getPublicProfile = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const { id } = req.params;
+    const { id } = req.params; // Expect patient_id string
     const result = await db.query(`
-      SELECT mp.*, u.full_name 
+      SELECT mp.patient_id, mp.blood_group, mp.allergies, mp.chronic_diseases, mp.medications, 
+             mp.emergency_contact_name, mp.emergency_contact_phone, u.full_name 
       FROM medical_profiles mp 
       JOIN users u ON mp.user_id = u.id 
-      WHERE mp.id = $1`, [id]);
+      WHERE mp.patient_id = $1`, [id]);
 
     if (result.rows.length === 0) {
       res.status(404).json({ message: 'Profile not found' });
