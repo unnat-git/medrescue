@@ -34,17 +34,23 @@ export default function EmergencyRequest() {
             const res = await fetch(API_ENDPOINTS.EMERGENCY.BASE, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({ latitude: lat, longitude: lng, phone_number: '1234567890' })
+              body: JSON.stringify({ 
+                latitude: lat, 
+                longitude: lng, 
+                phone_number: '1234567890',
+                pincode: '700107' // Hardcoded for testing the Anandapura drivers
+              })
             });
 
             const data = await res.json();
-            if (res.ok) {
+            if (res.ok && data.status === 'assigned') {
               setStatus('assigned');
-              setAmbulance(data.assigned_ambulance);
+              const amb = data.assigned_ambulance;
+              amb.eta = data.eta; // Attach ETA for UI
+              setAmbulance(amb);
               
               // Listen for ambulance updates
-              socket.on(`ambulanceLocation_${data.assigned_ambulance.id}`, (updateData: { latitude: number, longitude: number }) => {
-                console.log('Ambulance moved', updateData);
+              socket.on(`ambulanceLocation_${amb.id}`, (updateData: { latitude: number, longitude: number }) => {
                 setAmbulance((prev) => {
                   if (!prev) return null;
                   return {
@@ -56,7 +62,7 @@ export default function EmergencyRequest() {
               });
 
             } else {
-              alert(data.message || 'Error occurred');
+              alert(data.message || 'No ambulance found nearby.');
               setStatus('idle');
             }
           } catch (e) {
@@ -106,14 +112,17 @@ export default function EmergencyRequest() {
               <div className="bg-green-500 rounded-full w-12 h-12 flex items-center justify-center text-white shrink-0">✓</div>
               <div>
                 <div className="text-green-800 font-bold text-lg">Ambulance Assigned</div>
-                <div className="text-green-600 text-sm font-medium">ETA: ~5 minutes</div>
+                <div className="text-green-600 text-sm font-medium">Estimated arrival in ~{ambulance.eta || 5} minutes</div>
               </div>
             </div>
             
-            <div className="bg-gray-50 p-5 rounded-2xl border border-gray-100">
-              <h3 className="font-semibold text-gray-900 mb-2">Driver Details</h3>
-              <p className="text-gray-600"><strong>Name:</strong> {ambulance.driver_name}</p>
-              <p className="text-gray-600"><strong>Vehicle ID:</strong> AMB-{ambulance.id}</p>
+            <div className="bg-gray-50 p-5 rounded-2xl border border-gray-100 space-y-3">
+              <h3 className="font-semibold text-gray-900 border-b border-gray-200 pb-2">Driver Details</h3>
+              <div className="grid grid-cols-1 gap-2">
+                <p className="text-gray-600 flex justify-between"><span className="font-medium text-gray-400">Name:</span> <span className="font-bold">{ambulance.driver_name}</span></p>
+                <p className="text-gray-600 flex justify-between"><span className="font-medium text-gray-400">Phone:</span> <span className="font-bold text-red-600">{ambulance.phone_number}</span></p>
+                <p className="text-gray-600 flex justify-between"><span className="font-medium text-gray-400">Plate:</span> <span className="font-bold">{ambulance.ambulance_number}</span></p>
+              </div>
             </div>
 
             <div className="h-64 bg-gray-200 rounded-2xl flex items-center justify-center border border-gray-300 overflow-hidden relative">

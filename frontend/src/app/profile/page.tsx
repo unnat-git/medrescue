@@ -109,7 +109,7 @@ export default function ProfilePage() {
               <User className="h-5 w-5 text-white" />
             </div>
             <span className="font-semibold text-slate-700 hidden sm:block">
-              {profile ? "My Profile" : "User Dashboard"}
+              {profile ? `Patient ID: #${profile.id.toString().padStart(5, '0')}` : "User Dashboard"}
             </span>
           </div>
         </div>

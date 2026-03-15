@@ -24,6 +24,9 @@ CREATE TABLE IF NOT EXISTS medical_profiles (
 CREATE TABLE IF NOT EXISTS ambulances (
   id SERIAL PRIMARY KEY,
   driver_name VARCHAR(255) NOT NULL,
+  phone_number VARCHAR(50),
+  ambulance_number VARCHAR(50),
+  service_area_pincode VARCHAR(20),
   latitude DOUBLE PRECISION,
   longitude DOUBLE PRECISION,
   status VARCHAR(50) DEFAULT 'available'

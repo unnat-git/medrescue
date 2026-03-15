@@ -29,7 +29,9 @@ export interface Ambulance {
   id: number;
   driver_name: string;
   phone_number: string;
+  ambulance_number: string;
   latitude: number;
   longitude: number;
   status: 'available' | 'busy' | 'offline';
+  eta?: number;
 }

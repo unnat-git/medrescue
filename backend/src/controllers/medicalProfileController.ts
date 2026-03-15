@@ -15,7 +15,8 @@ export const createProfile = async (req: AuthRequest, res: Response): Promise<vo
     // Check if profile already exists
     const existing = await db.query('SELECT id FROM medical_profiles WHERE user_id = $1', [userId]);
     if (existing.rows.length > 0) {
-      res.status(400).json({ message: 'Medical profile already exists for this user' });
+      // If profile exists, treat as update or return error
+      res.status(400).json({ message: 'Medical profile already exists for this user. Please use update instead.' });
       return;
     }
 

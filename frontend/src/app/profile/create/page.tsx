@@ -10,6 +10,7 @@ import { API_ENDPOINTS } from "@/config/api";
 export default function CreateProfile() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [isEdit, setIsEdit] = useState(false);
   const [error, setError] = useState("");
   const [formData, setFormData] = useState({
     blood_group: '', 
@@ -24,7 +25,32 @@ export default function CreateProfile() {
     const token = localStorage.getItem("token");
     if (!token) {
       router.push("/login");
+      return;
     }
+    
+    // Check if profile exists to enter Edit mode
+    fetch(API_ENDPOINTS.PROFILE.BASE, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    })
+    .then(res => {
+      if (res.ok) return res.json();
+      return null;
+    })
+    .then(data => {
+      if (data) {
+        setIsEdit(true);
+        setFormData({
+          blood_group: data.blood_group || '',
+          allergies: data.allergies || '',
+          chronic_diseases: data.chronic_diseases || '',
+          medications: data.medications || '',
+          emergency_contact_name: data.emergency_contact_name || '',
+          emergency_contact_phone: data.emergency_contact_phone || ''
+        });
+      }
+    })
+    .catch(err => console.error("Error checking profile:", err));
+
   }, [router]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -38,8 +64,9 @@ export default function CreateProfile() {
 
     try {
       const token = localStorage.getItem("token");
+      // Use POST for create, PUT for update
       const res = await fetch(API_ENDPOINTS.PROFILE.BASE, {
-        method: 'POST',
+        method: isEdit ? 'PUT' : 'POST',
         headers: { 
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
@@ -52,7 +79,7 @@ export default function CreateProfile() {
         router.push('/profile');
       } else {
         const data = await res.json();
-        setError(data.message || 'Error creating profile');
+        setError(data.message || 'Error saving profile');
       }
      } catch (err: unknown) {
         console.error(err);
@@ -80,7 +107,7 @@ export default function CreateProfile() {
         <div className="bg-white rounded-3xl shadow-xl shadow-slate-200/50 border border-slate-100 overflow-hidden">
             <div className="bg-red-600 p-8 text-white relative overflow-hidden">
                 <Shield className="absolute -right-4 -bottom-4 h-32 w-32 text-white/10 rotate-12" />
-                <h1 className="text-3xl font-extrabold relative z-10">Complete Your Medical Profile</h1>
+                <h1 className="text-3xl font-extrabold relative z-10">{isEdit ? 'Update Your Medical Profile' : 'Complete Your Medical Profile'}</h1>
                 <p className="text-red-100 mt-2 relative z-10">This information will be encoded in your emergency QR code.</p>
             </div>
 
@@ -193,7 +220,7 @@ export default function CreateProfile() {
                     type="submit" 
                     className="w-full bg-red-600 hover:bg-red-700 text-white font-bold text-xl py-4 rounded-2xl shadow-lg shadow-red-200 transition-all transform hover:-translate-y-1 active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed"
                 >
-                    {loading ? 'Creating Profile...' : 'Save & Generate QR Identity'}
+                    {loading ? 'Saving...' : (isEdit ? 'Update Profile & Refresh QR' : 'Save & Generate QR Identity')}
                 </button>
             </form>
         </div>
