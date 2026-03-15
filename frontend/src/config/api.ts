@@ -14,8 +14,8 @@ export const API_ENDPOINTS = {
     VERIFY_OTP: `${API_BASE_URL}/api/auth/verify-otp`,
   },
   PROFILE: {
-    BASE: `${API_BASE_URL}/api/profile`,
-    PUBLIC: (id: string) => `${API_BASE_URL}/api/profile/public/${id}`,
+    BASE: `${API_BASE_URL}/api/profiles`,
+    PUBLIC: (id: string) => `${API_BASE_URL}/api/profiles/${id}`,
   },
   EMERGENCY: {
     BASE: `${API_BASE_URL}/api/emergency`,
