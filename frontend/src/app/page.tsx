@@ -1,20 +1,27 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Activity, LogIn, UserPlus, Menu, X } from "lucide-react";
 
 export default function Home() {
+  const router = useRouter();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
-    setIsLoggedIn(!!localStorage.getItem("token"));
-  }, []);
+    const token = localStorage.getItem("token");
+    if (token) {
+      router.push("/profile");
+      return;
+    }
+    setIsLoggedIn(false);
+  }, [router]);
 
   return (
-    <div className="flex flex-col min-h-screen bg-white text-slate-900">
-      <header className="px-4 lg:px-6 h-20 flex items-center border-b border-gray-100 shadow-sm sticky top-0 bg-white/80 backdrop-blur-md z-50">
+    <div className="flex flex-col min-h-screen bg-white text-slate-900 overflow-hidden relative">
+      <header className="px-4 lg:px-6 h-20 flex items-center border-b border-gray-100 shadow-sm sticky top-0 bg-white z-50">
         <Link className="flex items-center justify-center group" href="/">
           <div className="p-2 bg-red-50 rounded-xl group-hover:bg-red-100 transition-colors">
             <Activity className="h-6 w-6 text-red-600" />

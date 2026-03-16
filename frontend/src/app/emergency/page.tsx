@@ -98,8 +98,8 @@ export default function EmergencyRequest() {
   if (!isMounted) return null;
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col">
-      <header className="px-6 py-4 bg-white/80 backdrop-blur-md border-b border-slate-100 flex items-center justify-between sticky top-0 z-30 w-full">
+    <div className="min-h-screen bg-white flex flex-col relative">
+      <header className="px-6 py-4 bg-white border-b border-slate-100 flex items-center justify-between sticky top-0 z-50 w-full">
         <Link href="/" className="flex items-center gap-2 group">
           <div className="p-1.5 bg-red-50 rounded-lg group-hover:bg-red-100 transition-colors">
             <Activity className="h-5 w-5 text-red-600" />
