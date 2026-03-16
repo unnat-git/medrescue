@@ -11,5 +11,5 @@ export const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   const distance = R * c;
   
-  return distance; // Returns distance in km
+  return Number(distance.toFixed(1)); // Returns distance in km rounded to 1 decimal place
 };
