@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { socket } from '@/services/socket';
 import MapComponent from '@/components/MapComponent';
 import { API_ENDPOINTS } from '@/config/api';
@@ -9,17 +10,25 @@ import { Ambulance } from '@/types';
 
 
 export default function EmergencyRequest() {
+  const router = useRouter();
   const [status, setStatus] = useState<'idle' | 'requesting' | 'assigned' | 'arriving'>('idle');
   const [location, setLocation] = useState<{ lat: number; lng: number } | null>(null);
   const [ambulance, setAmbulance] = useState<Ambulance | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      router.push("/login");
+      return;
+    }
+    
     setIsMounted(true);
     socket.connect();
     return () => { socket.disconnect(); };
-  }, []);
+  }, [router]);
 
   const requestHelp = () => {
     setStatus('requesting');
@@ -40,9 +49,7 @@ export default function EmergencyRequest() {
               },
               body: JSON.stringify({ 
                 latitude: lat, 
-                longitude: lng, 
-                phone_number: '1234567890',
-                pincode: '700107' // Hardcoded for testing the Anandapura drivers
+                longitude: lng
               })
             });
 

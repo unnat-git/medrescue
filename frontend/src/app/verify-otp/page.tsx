@@ -126,7 +126,7 @@ export default function VerifyOTPPage() {
                 required
                 autoFocus
                 className="block w-full pl-12 pr-4 py-5 bg-slate-50 border-none rounded-2xl text-slate-900 text-2xl font-black tracking-[0.5em] text-center placeholder:text-slate-300 focus:ring-4 focus:ring-red-600/10 ring-offset-0 transition-all shadow-inner"
-                placeholder="Enter the verification code"
+                placeholder="Enter verification code"
                 value={otp}
                 onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
               />

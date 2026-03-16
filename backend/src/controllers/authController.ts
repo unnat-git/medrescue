@@ -18,10 +18,7 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
     // Format phone number: remove spaces and dashes
     phone_number = phone_number.replace(/[\s-]/g, '');
     
-    // Automatically add +91 prefix if user enters 10 digits
-    if (/^\d{10}$/.test(phone_number)) {
-      phone_number = `+91${phone_number}`;
-    }
+    // We expect the full E.164 formatted number from the frontend
 
     // Comprehensive check for user existence
     const existingUser = await db.query('SELECT * FROM users WHERE phone_number = $1', [phone_number]);

@@ -150,7 +150,7 @@ export default function CreateProfile() {
                             onChange={handleChange} 
                             value={formData.emergency_contact_name} 
                             className="w-full px-4 py-3 border border-slate-200 rounded-xl bg-slate-50 text-slate-900 font-medium placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all" 
-                            placeholder="e.g. Jane Doe (Wife)" 
+                            placeholder="Enter emergency contact name" 
                         />
                     </div>
 
@@ -165,7 +165,7 @@ export default function CreateProfile() {
                             onChange={handleChange} 
                             value={formData.emergency_contact_phone} 
                             className="w-full px-4 py-3 border border-slate-200 rounded-xl bg-slate-50 text-slate-900 font-medium placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all" 
-                            placeholder="+91XXXXXXXXXX" 
+                            placeholder="Enter emergency contact phone number" 
                         />
                     </div>
                 </div>
@@ -182,7 +182,7 @@ export default function CreateProfile() {
                             value={formData.allergies} 
                             rows={2} 
                             className="w-full px-4 py-3 border border-slate-200 rounded-xl bg-slate-50 text-slate-900 font-medium placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all resize-none" 
-                            placeholder="e.g. Penicillin, Peanuts (or 'None')"
+                            placeholder="List your allergies (or type 'None')"
                         ></textarea>
                     </div>
 
@@ -196,7 +196,7 @@ export default function CreateProfile() {
                             value={formData.chronic_diseases} 
                             rows={2} 
                             className="w-full px-4 py-3 border border-slate-200 rounded-xl bg-slate-50 text-slate-900 font-medium placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all resize-none" 
-                            placeholder="e.g. Type 2 Diabetes, Asthma"
+                            placeholder="List your chronic diseases (or type 'None')"
                         ></textarea>
                     </div>
 
@@ -210,7 +210,7 @@ export default function CreateProfile() {
                             value={formData.medications} 
                             rows={3} 
                             className="w-full px-4 py-3 border border-slate-200 rounded-xl bg-slate-50 text-slate-900 font-medium placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all resize-none" 
-                            placeholder="List medications and dosages..."
+                            placeholder="List your current medications and dosages"
                         ></textarea>
                     </div>
                 </div>

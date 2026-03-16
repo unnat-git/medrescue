@@ -3,14 +3,15 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { Activity, Phone, Lock, ArrowRight } from "lucide-react";
+import { Activity, Lock, ArrowRight } from "lucide-react";
 import { API_ENDPOINTS } from "@/config/api";
+import PhoneInputCustom from "@/components/PhoneInputCustom";
 
 
 export default function LoginPage() {
   const router = useRouter();
+  const [phoneNumber, setPhoneNumber] = useState<string | undefined>();
   const [formData, setFormData] = useState({
-    phoneNumber: "",
     password: "",
   });
   const [loading, setLoading] = useState(false);
@@ -22,6 +23,10 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!phoneNumber) {
+      setError("Phone number is required");
+      return;
+    }
     setLoading(true);
     setError("");
 
@@ -30,7 +35,7 @@ export default function LoginPage() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          phone_number: formData.phoneNumber,
+          phone_number: phoneNumber,
           password: formData.password,
         }),
       });
@@ -78,21 +83,13 @@ export default function LoginPage() {
             )}
 
             <div>
-              <label className="block text-sm font-semibold text-slate-700">Phone Number</label>
-              <div className="mt-1 relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Phone className="h-5 w-5 text-slate-400" />
-                </div>
-                <input
-                  name="phoneNumber"
-                  type="tel"
-                  required
-                  value={formData.phoneNumber}
-                  onChange={handleChange}
-                  className="appearance-none block w-full pl-10 pr-3 py-3 border border-slate-200 rounded-xl shadow-sm placeholder-slate-400 focus:outline-none focus:ring-red-500 focus:border-red-500 text-slate-900"
-                  placeholder="+919876543210"
-                />
-              </div>
+              <label className="block text-sm font-semibold text-slate-700 mb-2">Phone Number</label>
+              <PhoneInputCustom
+                value={phoneNumber}
+                onChange={setPhoneNumber}
+                placeholder="Enter your phone number"
+                required
+              />
             </div>
 
             <div>
@@ -108,6 +105,7 @@ export default function LoginPage() {
                   value={formData.password}
                   onChange={handleChange}
                   className="appearance-none block w-full pl-10 pr-3 py-3 border border-slate-200 rounded-xl shadow-sm placeholder-slate-400 focus:outline-none focus:ring-red-500 focus:border-red-500 text-slate-900"
+                  placeholder="Enter your password"
                 />
               </div>
             </div>

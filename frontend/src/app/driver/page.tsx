@@ -36,8 +36,8 @@ export default function DriverDashboard() {
   useEffect(() => {
     setIsMounted(true);
     setRequests([
-      { id: '101', patientName: 'John Doe', loc: { latitude: 28.6250, longitude: 77.2150 }, urg: 'High' },
-      { id: '102', patientName: 'Jane Smith', loc: { latitude: 28.6300, longitude: 77.2200 }, urg: 'Medium' }
+      { id: '101', patientName: 'Active Emergency 1', loc: { latitude: 28.6250, longitude: 77.2150 }, urg: 'High' },
+      { id: '102', patientName: 'Active Emergency 2', loc: { latitude: 28.6300, longitude: 77.2200 }, urg: 'Medium' }
     ]);
   }, []);
 

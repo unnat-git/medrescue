@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Activity, MapPin, Navigation, Phone, ArrowLeft, Loader2 } from "lucide-react";
 import { API_ENDPOINTS } from "@/config/api";
@@ -19,8 +20,15 @@ export default function NearbyHospitals() {
   const [hospitals, setHospitals] = useState<Hospital[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      router.push("/login");
+      return;
+    }
+
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -29,7 +37,7 @@ export default function NearbyHospitals() {
         (err) => {
           console.error("Geolocation error:", err);
           setError("Unable to retrieve your location. Showing general hospitals.");
-          // Fallback to default location (700107) if geolocation fails
+          // Fallback to default location
           fetchHospitals(22.5150, 88.3930);
         }
       );
@@ -37,11 +45,16 @@ export default function NearbyHospitals() {
       setError("Geolocation is not supported by your browser.");
       fetchHospitals(22.5150, 88.3930);
     }
-  }, []);
+  }, [router]);
 
   const fetchHospitals = async (lat: number, lng: number) => {
     try {
-      const response = await fetch(`${API_ENDPOINTS.HOSPITALS.NEARBY}?latitude=${lat}&longitude=${lng}`);
+      const token = localStorage.getItem("token");
+      const response = await fetch(`${API_ENDPOINTS.HOSPITALS.NEARBY}?latitude=${lat}&longitude=${lng}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
       if (!response.ok) throw new Error("Failed to fetch hospitals");
       const data = await response.json();
       setHospitals(data.hospitals);

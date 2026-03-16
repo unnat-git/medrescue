@@ -4,8 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Activity, User, Mail, Lock, CheckCircle, AlertCircle, ArrowRight } from "lucide-react";
-import PhoneInput from 'react-phone-number-input';
-import 'react-phone-number-input/style.css';
+import PhoneInputCustom from "@/components/PhoneInputCustom";
 import { API_ENDPOINTS } from "@/config/api";
 
 
@@ -122,13 +121,11 @@ export default function SignupPage() {
                 Phone Number
               </label>
               <div className="phone-input-container">
-                 <PhoneInput
-                    international
-                    defaultCountry="IN"
-                    placeholder="Enter your phone number"
+                 <PhoneInputCustom
                     value={phoneNumber}
                     onChange={setPhoneNumber}
-                    className="flex w-full px-4 py-2 bg-slate-50 border-none rounded-2xl text-slate-900 font-medium focus-within:ring-2 focus-within:ring-red-600 transition-all shadow-inner"
+                    placeholder="Enter your phone number"
+                    required
                   />
               </div>
               <p className="mt-2 text-[10px] text-slate-400 font-bold uppercase tracking-wider ml-1">
@@ -147,7 +144,7 @@ export default function SignupPage() {
                 <input
                   type="email"
                   className="block w-full pl-11 pr-4 py-4 bg-slate-50 border-none rounded-2xl text-slate-900 font-medium placeholder:text-slate-400 focus:ring-2 focus:ring-red-600 ring-offset-0 transition-all shadow-inner"
-                  placeholder="Enter your email address (optional)"
+                  placeholder="Enter your email"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 />
@@ -227,46 +224,7 @@ export default function SignupPage() {
       </div>
       
       <style jsx global>{`
-        .PhoneInput {
-          display: flex;
-          align-items: center;
-          width: 100%;
-          background: #f8fafc;
-          border-radius: 1rem;
-          padding: 0.5rem 1rem;
-          box-shadow: inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
-        }
-        .PhoneInputInput {
-          flex: 1;
-          min-width: 0;
-          background: transparent;
-          border: none;
-          padding: 0.75rem 0;
-          font-family: inherit;
-          font-size: 1rem;
-          font-weight: 600;
-          color: #0f172a;
-          outline: none;
-        }
-        .PhoneInputCountry {
-          margin-right: 1rem;
-          display: flex;
-          align-items: center;
-          background: white;
-          padding: 0.5rem;
-          border-radius: 0.75rem;
-          box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-        }
-        .PhoneInputCountrySelect {
-          cursor: pointer;
-        }
-        .PhoneInputCountryIcon {
-            width: 1.5rem;
-            height: 1rem;
-            border-radius: 0.25rem;
-            overflow: hidden;
-            box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.1);
-        }
+        /* Custom styles for signup page if needed */
       `}</style>
 
     </div>
