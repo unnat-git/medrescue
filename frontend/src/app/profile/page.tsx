@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { User, Activity, Shield, Phone, MapPin, Download, Edit3, PlusCircle, LogOut } from "lucide-react";
+import { User, Activity, Shield, Phone, MapPin, Download, Edit3, PlusCircle, LogOut, ChevronRight } from "lucide-react";
 import { API_ENDPOINTS } from "@/config/api";
 import { MedicalProfile } from "@/types";
 import QRCode from "qrcode";
@@ -96,14 +96,15 @@ export default function ProfilePage() {
           <Activity className="h-6 w-6 text-red-600" />
           <span className="font-bold text-xl text-slate-900 tracking-tight">MedRescue</span>
         </Link>
-        <div className="flex items-center gap-6">
-          <Link href="/hospitals" className="text-sm font-bold text-slate-600 hover:text-red-600 transition-colors">
+        <div className="flex items-center gap-8">
+          <Link href="/dashboard/self-transport" className="flex items-center gap-1 text-sm font-bold text-slate-600 hover:text-red-600 transition-colors group">
             Self Transport
+            <ChevronRight className="h-4 w-4 text-slate-400 group-hover:text-red-600 transition-colors" />
           </Link>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 border-l border-slate-100 pl-6">
             <button 
               onClick={handleLogout}
-              className="p-2 text-slate-400 hover:text-red-600 transition-colors"
+              className="p-2 text-slate-400 hover:text-red-600 transition-colors bg-slate-50 rounded-xl"
               title="Log Out"
             >
               <LogOut className="h-5 w-5" />
