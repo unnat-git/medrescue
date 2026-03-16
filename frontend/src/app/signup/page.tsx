@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Activity, User, Mail, Lock, CheckCircle, AlertCircle, ArrowRight } from "lucide-react";
@@ -18,6 +18,13 @@ export default function SignupPage() {
   const [phoneNumber, setPhoneNumber] = useState<string | undefined>();
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      router.push("/profile");
+    }
+  }, [router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

@@ -13,11 +13,11 @@ export default function Home() {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
-      router.push("/profile");
-      return;
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
     }
-    setIsLoggedIn(false);
-  }, [router]);
+  }, []);
 
   return (
     <div className="flex flex-col min-h-screen bg-white text-slate-900 overflow-hidden relative">
