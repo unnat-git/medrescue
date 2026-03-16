@@ -19,5 +19,8 @@ export const API_ENDPOINTS = {
   },
   EMERGENCY: {
     BASE: `${API_BASE_URL}/api/emergency`,
+  },
+  HOSPITALS: {
+    NEARBY: `${API_BASE_URL}/api/hospitals/nearby`,
   }
 };

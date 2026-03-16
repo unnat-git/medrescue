@@ -96,21 +96,26 @@ export default function ProfilePage() {
           <Activity className="h-6 w-6 text-red-600" />
           <span className="font-bold text-xl text-slate-900 tracking-tight">MedRescue</span>
         </Link>
-        <div className="flex items-center gap-4">
-          <button 
-            onClick={handleLogout}
-            className="p-2 text-slate-400 hover:text-red-600 transition-colors"
-            title="Log Out"
-          >
-            <LogOut className="h-5 w-5" />
-          </button>
-          <div className="flex items-center gap-3 pl-4 border-l border-slate-100">
-            <div className="w-8 h-8 rounded-full bg-slate-900 flex items-center justify-center">
-              <User className="h-5 w-5 text-white" />
+        <div className="flex items-center gap-6">
+          <Link href="/hospitals" className="text-sm font-bold text-slate-600 hover:text-red-600 transition-colors">
+            Self Transport
+          </Link>
+          <div className="flex items-center gap-4">
+            <button 
+              onClick={handleLogout}
+              className="p-2 text-slate-400 hover:text-red-600 transition-colors"
+              title="Log Out"
+            >
+              <LogOut className="h-5 w-5" />
+            </button>
+            <div className="flex items-center gap-3 pl-4 border-l border-slate-100">
+              <div className="w-8 h-8 rounded-full bg-slate-900 flex items-center justify-center">
+                <User className="h-5 w-5 text-white" />
+              </div>
+              <span className="font-semibold text-slate-700 hidden sm:block">
+                {profile ? `Patient ID: ${profile.patient_id}` : "User Dashboard"}
+              </span>
             </div>
-            <span className="font-semibold text-slate-700 hidden sm:block">
-              {profile ? `Patient ID: ${profile.patient_id}` : "User Dashboard"}
-            </span>
           </div>
         </div>
       </header>

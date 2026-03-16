@@ -31,9 +31,13 @@ export default function EmergencyRequest() {
           setLocation({ lat, lng });
 
           try {
+            const token = localStorage.getItem('token');
             const res = await fetch(API_ENDPOINTS.EMERGENCY.BASE, {
               method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
+              headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+              },
               body: JSON.stringify({ 
                 latitude: lat, 
                 longitude: lng, 

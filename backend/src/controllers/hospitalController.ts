@@ -41,8 +41,8 @@ export const getNearbyHospitals = async (req: Request, res: Response): Promise<v
     // Sort by nearest first
     hospitalsWithDistance.sort((a, b) => a.distance - b.distance);
     
-    // Take Top 15 closest
-    const topHospitals = hospitalsWithDistance.slice(0, 15);
+    // Take Top 10 closest
+    const topHospitals = hospitalsWithDistance.slice(0, 10);
 
     res.status(200).json({
       message: 'Nearby hospitals fetched successfully',
