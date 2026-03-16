@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS users (
 CREATE TABLE IF NOT EXISTS medical_profiles (
   id SERIAL PRIMARY KEY,
   user_id INTEGER UNIQUE REFERENCES users(id) ON DELETE CASCADE,
+  patient_id VARCHAR(50) UNIQUE NOT NULL,
   blood_group VARCHAR(10),
   allergies TEXT,
   chronic_diseases TEXT,

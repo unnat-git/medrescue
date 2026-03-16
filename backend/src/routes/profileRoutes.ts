@@ -8,7 +8,7 @@ const router = Router();
 router.post('/', authenticateToken, createProfile);
 router.put('/', authenticateToken, updateProfile);
 router.get('/', authenticateToken, getProfile);
-router.get('/:id', getPublicProfile);
+router.get('/public/:id', getPublicProfile);
 
 
 export default router;

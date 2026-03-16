@@ -103,13 +103,15 @@ export const getProfile = async (req: AuthRequest, res: Response): Promise<void>
 
 export const getPublicProfile = async (req: AuthRequest, res: Response): Promise<void> => {
   try {
-    const { id } = req.params; // Expect patient_id string
+    const { id: patient_id } = req.params; 
+    console.log(`Fetching medical profile for patient_id: ${patient_id}`);
+    
     const result = await db.query(`
       SELECT mp.patient_id, mp.blood_group, mp.allergies, mp.chronic_diseases, mp.medications, 
              mp.emergency_contact_name, mp.emergency_contact_phone, u.full_name 
       FROM medical_profiles mp 
       JOIN users u ON mp.user_id = u.id 
-      WHERE mp.patient_id = $1`, [id]);
+      WHERE mp.patient_id = $1`, [patient_id]);
 
     if (result.rows.length === 0) {
       res.status(404).json({ message: 'Profile not found' });
