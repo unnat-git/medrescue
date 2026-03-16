@@ -42,28 +42,66 @@ export default function Home() {
         </nav>
 
       </header>
-      <main className="flex-1 flex flex-col items-center justify-center text-center px-4">
-        <div className="space-y-6 max-w-3xl">
-          <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-gray-900 leading-tight">
-            Emergency Medical <span className="text-red-600">Quick Response</span> System
-          </h1>
-          <p className="mx-auto max-w-[700px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-            One-click emergency requests, real-time ambulance tracking, and a digital Qr-based medical identity.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center pt-8">
-            <Link
-              href="/emergency"
-              className="inline-flex h-12 items-center justify-center rounded-full bg-red-600 px-8 text-sm font-bold text-white shadow-lg shadow-red-500/30 hover:bg-red-700 transition"
-            >
-              Request Emergency Help
-            </Link>
+      <main className="flex-1 flex items-center justify-center py-12 md:py-24">
+        <div className="max-w-7xl mx-auto px-4 md:px-6 w-full">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {/* Left Content */}
+            <div className="space-y-8 flex flex-col items-center lg:items-start text-center lg:text-left">
+              <div className="space-y-4">
+                <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-gray-900 leading-tight">
+                  Emergency Medical <span className="text-red-600">Quick Response</span> System
+                </h1>
+                <p className="max-w-[600px] text-gray-500 md:text-xl/relaxed xl:text-xl/relaxed">
+                  One-click emergency help, real-time tracking, and a digital QR medical ID.
+                </p>
+              </div>
+              
+              <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+                <Link
+                  href="/emergency"
+                  className="inline-flex h-14 items-center justify-center rounded-2xl bg-red-600 px-10 text-base font-bold text-white shadow-xl shadow-red-200 hover:bg-red-700 transition transform hover:-translate-y-1"
+                >
+                  Request Emergency Help
+                </Link>
 
-            <Link
-              href="/profile/create"
-              className="inline-flex h-12 items-center justify-center rounded-full border border-gray-200 bg-white px-8 text-sm font-medium hover:bg-gray-100 hover:text-gray-900 transition mt-4 sm:mt-0"
-            >
-              Create Medical Profile
-            </Link>
+                <Link
+                  href="/profile/create"
+                  className="inline-flex h-14 items-center justify-center rounded-2xl border-2 border-slate-100 bg-white px-10 text-base font-bold text-slate-700 hover:bg-slate-50 transition transform hover:-translate-y-1"
+                >
+                  Create Medical Profile
+                </Link>
+              </div>
+              
+              <div className="flex items-center gap-6 pt-4 text-slate-400">
+                <div className="flex flex-col">
+                  <span className="text-2xl font-black text-slate-900">24/7</span>
+                  <span className="text-xs uppercase tracking-widest font-bold">Availability</span>
+                </div>
+                <div className="h-10 w-px bg-slate-100"></div>
+                <div className="flex flex-col">
+                  <span className="text-2xl font-black text-slate-900">100+</span>
+                  <span className="text-xs uppercase tracking-widest font-bold">Rescuers</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Right Video Animation */}
+            <div className="relative flex justify-center lg:justify-end">
+              <div className="relative w-full max-w-[500px] aspect-square rounded-[3rem] overflow-hidden">
+                <video
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  className="w-full h-full object-cover"
+                >
+                  <source src="/assets/animated_video.mp4" type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+                {/* Subtle overlay to blend into UI better */}
+                <div className="absolute inset-0 bg-transparent" />
+              </div>
+            </div>
           </div>
         </div>
       </main>
