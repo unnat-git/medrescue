@@ -159,7 +159,7 @@ export default function Home() {
                   muted
                   loop
                   playsInline
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover transform scale-95 transition-transform"
                 >
                   <source src="/assets/animated_video.mp4" type="video/mp4" />
                   Your browser does not support the video tag.
