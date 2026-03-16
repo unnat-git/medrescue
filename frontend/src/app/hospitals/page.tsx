@@ -71,7 +71,7 @@ export default function NearbyHospitals() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen">
       <header className="px-6 py-4 bg-white border-b border-slate-100 flex items-center justify-between sticky top-0 z-20">
         <div className="flex items-center gap-4">
           <Link href="/profile" className="p-2 text-slate-400 hover:text-slate-600 transition-colors">

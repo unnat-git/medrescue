@@ -90,7 +90,7 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen">
       <header className="px-6 py-4 bg-white border-b border-slate-100 flex items-center justify-between sticky top-0 z-20">
         <Link href="/" className="flex items-center gap-2">
           <Activity className="h-6 w-6 text-red-600" />

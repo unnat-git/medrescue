@@ -22,9 +22,6 @@ export default function Home() {
           <Link className="text-sm font-medium hover:text-red-600 transition-colors" href="/profile">
             Medical Profile
           </Link>
-          <Link className="text-sm font-medium hover:text-red-600 transition-colors" href="/driver">
-            Driver
-          </Link>
 
           {!isLoggedIn ? (
             <>

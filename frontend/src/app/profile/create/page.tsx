@@ -91,7 +91,7 @@ export default function CreateProfile() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-3xl mx-auto">
         <div className="flex items-center justify-between mb-8">
             <Link href="/profile" className="flex items-center gap-2 text-slate-500 hover:text-slate-900 transition-colors">

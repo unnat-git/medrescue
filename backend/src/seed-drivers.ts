@@ -1,16 +1,16 @@
 import db from './db';
 
 const drivers = [
-  { name: 'Kushal Das', phone: '+919876543210', vehicle: 'WB01-A1234', lat: 22.5186, lng: 88.4067, pincode: '700107' },
-  { name: 'Amit Roy', phone: '+919876543211', vehicle: 'WB01-B5678', lat: 22.5190, lng: 88.4070, pincode: '700107' },
-  { name: 'Rahul Sen', phone: '+919876543212', vehicle: 'WB01-C9012', lat: 22.5200, lng: 88.4050, pincode: '700107' },
-  { name: 'Santu Pal', phone: '+919876543213', vehicle: 'WB01-D3456', lat: 22.5170, lng: 88.4080, pincode: '700107' },
-  { name: 'Bikram De', phone: '+919876543214', vehicle: 'WB01-E7890', lat: 22.5210, lng: 88.4090, pincode: '700107' },
-  { name: 'Joy Ghosh', phone: '+919876543215', vehicle: 'WB01-F1234', lat: 22.5220, lng: 88.4100, pincode: '700107' },
-  { name: 'Subhankar Maity', phone: '+919876543216', vehicle: 'WB01-G5678', lat: 22.5150, lng: 88.4040, pincode: '700107' },
-  { name: 'Debasish Kar', phone: '+919876543217', vehicle: 'WB01-H9012', lat: 22.5160, lng: 88.4030, pincode: '700107' },
-  { name: 'Pradip Mal', phone: '+919876543218', vehicle: 'WB01-I3456', lat: 22.5230, lng: 88.4110, pincode: '700107' },
-  { name: 'Sujoy Khan', phone: '+919876543219', vehicle: 'WB01-J7890', lat: 22.5240, lng: 88.4120, pincode: '700107' },
+  { name: 'Rahul Das', phone: '+919876543210', vehicle: 'WB04AB1234', lat: 22.5705, lng: 88.4320, pincode: '700107' },
+  { name: 'Arjun Singh', phone: '+919876543211', vehicle: 'WB04AB2234', lat: 22.5689, lng: 88.4308, pincode: '700107' },
+  { name: 'Santu Pal', phone: '+919876543213', vehicle: 'WB04AB3456', lat: 22.5710, lng: 88.4330, pincode: '700107' },
+  { name: 'Bikram De', phone: '+919876543214', vehicle: 'WB04AB7890', lat: 22.5720, lng: 88.4340, pincode: '700107' },
+  { name: 'Joy Ghosh', phone: '+919876543215', vehicle: 'WB04AB1256', lat: 22.5695, lng: 88.4315, pincode: '700107' },
+  { name: 'Subhankar Maity', phone: '+919876543216', vehicle: 'WB04AB5678', lat: 22.5680, lng: 88.4290, pincode: '700107' },
+  { name: 'Debasish Kar', phone: '+919876543217', vehicle: 'WB04AB9012', lat: 22.5730, lng: 88.4350, pincode: '700107' },
+  { name: 'Pradip Mal', phone: '+919876543218', vehicle: 'WB04AB3478', lat: 22.5740, lng: 88.4360, pincode: '700107' },
+  { name: 'Sujoy Khan', phone: '+919876543219', vehicle: 'WB04AB7812', lat: 22.5750, lng: 88.4370, pincode: '700107' },
+  { name: 'Amit Roy', phone: '+919876543212', vehicle: 'WB04AB5690', lat: 22.5700, lng: 88.4310, pincode: '700107' },
 ];
 
 async function seedDrivers() {

@@ -94,7 +94,7 @@ export default function EmergencyRequest() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center p-6 bg-red-50">
+    <div className="flex min-h-screen flex-col items-center justify-center p-6">
       <div className="bg-white rounded-3xl shadow-xl p-8 max-w-md w-full text-center">
         <h1 className="text-3xl font-extrabold text-red-600 mb-2">Emergency Help</h1>
         <p className="text-gray-500 mb-8">Tap the button to request immediate medical assistance</p>
@@ -113,7 +113,7 @@ export default function EmergencyRequest() {
         {status === 'requesting' && (
           <div className="my-16 space-y-4">
             <div className="w-16 h-16 border-4 border-red-600 border-t-transparent rounded-full animate-spin mx-auto"></div>
-            <div className="text-xl font-semibold text-gray-700">Locating nearest ambulance...</div>
+            <div className="text-xl font-semibold text-gray-700 animate-pulse">Searching for nearest ambulance...</div>
           </div>
         )}
 
@@ -123,7 +123,7 @@ export default function EmergencyRequest() {
               <div className="bg-green-500 rounded-full w-12 h-12 flex items-center justify-center text-white shrink-0">✓</div>
               <div>
                 <div className="text-green-800 font-bold text-lg">Ambulance Assigned</div>
-                <div className="text-green-600 text-sm font-medium">Estimated arrival in ~{ambulance.eta || 5} minutes</div>
+                <div className="text-green-600 text-sm font-medium">Ambulance {ambulance.ambulance_number} accepted your request and is on the way.</div>
               </div>
             </div>
             
