@@ -35,7 +35,7 @@ MedRescue is a comprehensive emergency medical response system designed to strea
 
 ### A. Authentication Flow
 1. **User Registration**: Users register using their phone number.
-2. **OTP Verification**: The system sends a 6-digit code via Twilio.
+2. **OTP Verification**: The system sends a 4-digit code via Twilio.
 3. **Session Management**: Upon successful verification, a JWT (JSON Web Token) is issued to the frontend, authorizing subsequent API calls.
 
 ### B. Emergency SOS System
