@@ -6,5 +6,5 @@ const URL = API_BASE_URL;
 
 export const socket = io(URL, {
   autoConnect: false,
-  transports: ["polling", "websocket"]
+  transports: ["websocket"]
 });
